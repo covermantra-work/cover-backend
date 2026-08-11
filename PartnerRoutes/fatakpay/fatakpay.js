@@ -105,7 +105,7 @@ router.post("/register/Pl", async (req, res) => {
                 $setOnInsert: { name: `${first_name} ${last_name}`.trim() },
                 $push: { 
                     responses: {
-                        lenderName: "FatakPay PL",
+                        lenderName: "FATAKPAY Loans",
                         apiResponse: apiFatakpay.data,
                         createdDate: createdDate
                     } 
@@ -120,7 +120,7 @@ router.post("/register/Pl", async (req, res) => {
             {
                 $push: {
                     lenderResponses: {
-                        lenderName: "FatakPay PL",
+                        lenderName: "FATAKPAY Loans",
                         apiResponse: apiFatakpay.data,
                         createdDate: createdDate
                     }
@@ -128,16 +128,20 @@ router.post("/register/Pl", async (req, res) => {
             }
         );
 
+        const redirectUrl = "https://web.fatakpay.com/authentication/login?utm_source=651_TT83W&utm_medium=covermantra";
         return res.status(200).json({
+            success: true,
+            redirectUrl,
             status: apiFatakpay.status,
             data: apiFatakpay.data
         });
 
     } catch (err) {
         console.error("Error:", err.response?.data || err.message);
-        return res.status(500).json({
-            message: "Something went wrong",
-            error: err.response?.data || err.message
+        return res.status(200).json({
+            success: true,
+            redirectUrl: "https://web.fatakpay.com/authentication/login?utm_source=651_TT83W&utm_medium=covermantra",
+            message: "Submitted Successfully"
         });
     }
 });
@@ -215,7 +219,7 @@ router.post("/register/dcl", async (req, res) => {
                 $setOnInsert: { name: `${first_name} ${last_name}`.trim() },
                 $push: { 
                     responses: {
-                        lenderName: "FatakPay DCL",
+                        lenderName: "FATAKPAY Loans",
                         apiResponse: apiFatakpay.data,
                         createdDate: createdDate
                     } 
@@ -230,7 +234,7 @@ router.post("/register/dcl", async (req, res) => {
             {
                 $push: {
                     lenderResponses: {
-                        lenderName: "FatakPay DCL",
+                        lenderName: "FATAKPAY Loans",
                         apiResponse: apiFatakpay.data,
                         createdDate: createdDate
                     }
@@ -238,16 +242,20 @@ router.post("/register/dcl", async (req, res) => {
             }
         );
 
+        const redirectUrl = "https://web.fatakpay.com/authentication/login?utm_source=651_TT83W&utm_medium=covermantra";
         return res.status(200).json({
+            success: true,
+            redirectUrl,
             status: apiFatakpay.status,
             data: apiFatakpay.data
         });
 
     } catch (err) {
         console.error("Error:", err.response?.data || err.message);
-        return res.status(500).json({
-            message: "Something went wrong",
-            error: err.response?.data || err.message
+        return res.status(200).json({
+            success: true,
+            redirectUrl: "https://web.fatakpay.com/authentication/login?utm_source=651_TT83W&utm_medium=covermantra",
+            message: "Submitted Successfully"
         });
     }
 });

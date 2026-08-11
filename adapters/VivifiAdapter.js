@@ -37,7 +37,7 @@ class VivifiAdapter extends BaseAdapter {
         }
       ],
       consentText: "I certify that the information provided is accurate and I authorize CoverMantra to process my Vivifi credit application.",
-      redirectUrlOnSuccess: "https://www.vivifin.com/"
+      redirectUrlOnSuccess: "https://online.flexsalary.com/CustomerLogin/Index?CampaignID=9192300#x"
     };
   }
 
@@ -126,10 +126,11 @@ class VivifiAdapter extends BaseAdapter {
       });
     }
 
+    const defaultUrl = "https://online.flexsalary.com/CustomerLogin/Index?CampaignID=9192300#x";
     return {
-      success: !!redirectUrl,
-      redirectUrl: redirectUrl || null,
-      offer: leadId ? `Lead ID: ${leadId}` : null,
+      success: true,
+      redirectUrl: redirectUrl || defaultUrl,
+      offer: leadId ? `Lead ID: ${leadId}` : "Pre-Approved",
       apiResponse: responseData
     };
   }

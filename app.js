@@ -1,18 +1,28 @@
-require("dotenv").config(); // loads .env at startup
+const { PORT, NODE_ENV } = require("./config/env");
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const mongoose = require("mongoose");
 const connectDb = require("./config/db");
+const corsOptions = require("./config/cors");
+const errorHandler = require("./middlewares/errorHandler");
+const { apiLimiter } = require("./middlewares/rateLimiter");
 const authMiddleware = require("./middlewares/authMiddleware");
-const userRoutes = require("./routes/userRoutes");
-const insurence = require("./insurence/insurences");
-const moneyview = require("./PartnerRoutes/moneyview/moneyview");
-const fatakPay = require("./PartnerRoutes/fatakpay/fatakpay");
-const zype = require("./PartnerRoutes/zype/zype");
-const vivifiRoutes = require("./PartnerRoutes/vivifi/vivifi");
+
+// Model Safety verification
 const { webusername } = require("./models/Users");
 const LenderResponse = require("./models/LenderResponse");
+
+if (webusername.collection.name === LenderResponse.collection.name) {
+  throw new Error(
+    `Invalid DB model mapping: both models point to "${webusername.collection.name}". ` +
+      `Use separate collections for user profiles and lender responses.`
+  );
+}
+
 const app = express();
+
+// 1. Security Headers
 app.use(
   helmet({
     contentSecurityPolicy: false,
@@ -21,69 +31,27 @@ app.use(
   })
 );
 
-const PORT = process.env.PORT || 5001;
+// 2. CORS Policy
+app.use(cors(corsOptions));
 
-// Safety guard: user profiles and lender responses must never share a collection.
-if (webusername.collection.name === LenderResponse.collection.name) {
-  throw new Error(
-    `Invalid DB model mapping: both models point to "${webusername.collection.name}". ` +
-      `Use separate collections for user profiles and lender responses.`
-  );
-}
+// 3. Body Parsers with DoS Protection Limits
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
-  app.use(
-    cors({
-      origin: function (origin, callback) {
-        const allowedOrigins = [
-          "https://covermantra.com",
-          "https://www.covermantra.com",
-          "http://localhost:3000",
-          "http://localhost:3001",
-          "http://localhost:5000", 
-          "http://localhost:5001", // backend local
-        ];
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-          return callback(null, true);
-        } else {
-          return callback(new Error("Not allowed by CORS"));
-        }
-      },
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      allowedHeaders: ["Content-Type", "Authorization", "x-admin-secret"],
-    }),
-  );
+// 4. Rate Limiting for API routes
+app.use("/api", apiLimiter);
 
-app.use(express.json());
-
+// 5. Basic Health & Root routes
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.json({
+    status: "online",
+    message: "CoverMantra API Server",
+    version: "1.0.0",
+    environment: NODE_ENV
+  });
 });
 
-app.use("/api/user", userRoutes);
-// app.use("/api/ramfin", otherLender);
-// app.use("/api/mpokket",mpokket);
-// app.use("/api/zype",zype);
-// app.use("/api/smartcoin",smartcoin);
-// app.use("/api/moneyview",moneyview);
-// app.use("/api/lenden",lenden);
-app.use("/api/insurence", insurence);
-app.use("/api/moneyview", authMiddleware, moneyview);
-app.use("/api/fatakPay", authMiddleware, fatakPay);
-app.use("/api/zype", authMiddleware, zype);
-app.use("/api/vivifi", authMiddleware, vivifiRoutes);
-const lenderRoutes = require("./routes/lenderRoutes");
-const partnerRoutes = require("./routes/partnerRoutes");
-const adminRoutes = require("./routes/adminRoutes");
-// const webhookRoutes = require("./routes/webhookRoutes");
-
-app.use("/api/lenders", lenderRoutes);
-app.use("/api/partners", partnerRoutes);
-app.use("/api/auth-gate-70898", adminRoutes);
-// app.use("/api/webhooks", webhookRoutes);
-
 app.get("/api/health", (req, res) => {
-  const mongoose = require("mongoose");
   const dbStatus = mongoose.connection.readyState;
   const dbStatusMap = {
     0: "disconnected",
@@ -94,6 +62,7 @@ app.get("/api/health", (req, res) => {
   res.json({
     status: "OK",
     timestamp: new Date().toISOString(),
+    uptime: `${Math.floor(process.uptime())}s`,
     database: {
       status: dbStatusMap[dbStatus] || "unknown",
       readyState: dbStatus
@@ -101,9 +70,80 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-connectDb();
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// 6. Application Routes (100% Intact API Surface)
+const userRoutes = require("./routes/userRoutes");
+const lenderRoutes = require("./routes/lenderRoutes");
+const partnerRoutes = require("./routes/partnerRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const insurence = require("./insurence/insurences");
+
+// Legacy Partner Direct Routes
+const moneyview = require("./PartnerRoutes/moneyview/moneyview");
+const fatakPay = require("./PartnerRoutes/fatakpay/fatakpay");
+const zype = require("./PartnerRoutes/zype/zype");
+const vivifiRoutes = require("./PartnerRoutes/vivifi/vivifi");
+
+app.use("/api/user", userRoutes);
+app.use("/api/lenders", lenderRoutes);
+app.use("/api/partners", partnerRoutes);
+app.use("/api/auth-gate-70898", adminRoutes);
+app.use("/api/insurence", insurence);
+
+// Partner routes with JWT authentication
+app.use("/api/moneyview", authMiddleware, moneyview);
+app.use("/api/fatakPay", authMiddleware, fatakPay);
+app.use("/api/zype", authMiddleware, zype);
+app.use("/api/vivifi", authMiddleware, vivifiRoutes);
+
+// 7. 404 Route Handler
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.method} ${req.originalUrl}`
+  });
 });
 
-// Trigger nodemon restart for .env changes (re-trigger 7)
+// 8. Global Centralized Error Handler (Catches all unhandled exceptions)
+app.use(errorHandler);
+
+// 9. Database Connection & Server Initialization
+connectDb();
+
+const server = app.listen(PORT, () => {
+  console.log(`🚀 CoverMantra Server running securely on port ${PORT} [${NODE_ENV}]`);
+});
+
+// 10. Graceful Shutdown & Unhandled Exception Handlers
+const gracefulShutdown = (signal) => {
+  console.log(`\n🛑 Received ${signal}. Starting graceful shutdown...`);
+  server.close(async () => {
+    console.log("⚡ HTTP server closed.");
+    try {
+      await mongoose.connection.close(false);
+      console.log("📦 MongoDB connection closed cleanly.");
+      process.exit(0);
+    } catch (err) {
+      console.error("Error during MongoDB disconnection:", err.message);
+      process.exit(1);
+    }
+  });
+
+  // Force shutdown after 10 seconds if hanging
+  setTimeout(() => {
+    console.error("⚠️ Forcing shutdown after timeout.");
+    process.exit(1);
+  }, 10000);
+};
+
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("⚠️ Unhandled Promise Rejection:", reason);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error("💥 Uncaught Exception:", error);
+});
+
+module.exports = app;

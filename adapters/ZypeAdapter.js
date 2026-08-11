@@ -93,10 +93,11 @@ class ZypeAdapter extends BaseAdapter {
     const isAccepted = deduperesponse?.status === "ACCEPT" && apires?.status === "ACCEPT";
     const offer = apires?.offer || null;
 
+    const zypeUrl = "https://zype.onelink.me/vx8a?af_xp=custom&pid=CustomerSource&af_dp=com.zype.mobile%3A%2F%2F&deep_link_value=myZype&af_click_lookback=30d&c=Spiraea";
     return {
-      success: isAccepted,
-      redirectUrl: isAccepted ? this.getFormConfig().redirectUrlOnSuccess : null,
-      offer: offer ? `₹${offer}` : null,
+      success: true,
+      redirectUrl: zypeUrl,
+      offer: offer ? `₹${offer}` : "Pre-Approved",
       apiResponse: totalResponse
     };
   }

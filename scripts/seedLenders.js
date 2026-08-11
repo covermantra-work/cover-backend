@@ -12,12 +12,7 @@ const lendersWithLogos = [
   {
     name: "FDPL Finance",
     logo: "https://www.fdplfinance.com/assets/images/logo/FatakLoans.svg",
-    dbNameMatch: "FATAKPAY PL"
-  },
-  {
-    name: "FDPL Finance DCL",
-    logo: "https://www.fdplfinance.com/assets/images/logo/FatakLoans.svg",
-    dbNameMatch: "FATAKPAY DCL"
+    dbNameMatch: "FATAKPAY Loans"
   },
   {
     name: "Zype",

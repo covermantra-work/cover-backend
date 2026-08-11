@@ -1,6 +1,6 @@
 # CoverMantra Fullstack Architecture
 
-**Last Updated:** 8 June 2026
+**Last Updated:** 5 August 2026
 
 ## Project Vision
 CoverMantra is a loan aggregator and insurance advisory platform. The fullstack product should provide a polished, responsive web experience while aggregating loan offers from partner lenders in real time.
@@ -96,11 +96,13 @@ CoverMantra is a loan aggregator and insurance advisory platform. The fullstack 
 - Notifications and error handling in frontend using `react-toastify`
 
 ## Security & Compliance
-- OTP security and rate limiting (using `express-rate-limit` middleware)
-- JWT authentication with role attributes (`role: 'user' | 'admin'`)
-- Dual-mode admin verification: `x-admin-secret` header token check or admin role JWT claim
-- Secure storage of user PII
-- HTTPS, CORS, input validation, CSRF mitigation
+- **Authentication**: OTP security with rate limiting (using `express-rate-limit` middleware on `/send-otp` and `/verify-otp`).
+- **Dynamic Role Verification**: JWT authentication backed by dynamic database-level checks for administrators (resolves the JWT payload phone against the database role column in `combinedAdminAuth`).
+- **Data Validation & Sanitization**: Strict route-level verification for PAN cards (`isValidPAN`), Mobile numbers (`isValidMobileNumber`), and Email formats (`isValidEmail` regex validation).
+- **Consent Tracking**: Explicit storage of user consent (boolean state and exact legal statement text) recorded on user registration models.
+- **Deduplication & Anti-Flood**: Frontend-level form locking (`isSubmitting` status) that disables submissions and shows visual loaders, paired with backend adapterLocks.
+- **Dual-Mode Admin Access**: Verified via `x-admin-secret` header token checks or JWT role check.
+- **Secure Access Rules**: No wildcard CORS configurations; Helmet security headers implemented for clickjacking/MIME-type enforcement.
 
 ## Operations & Monitoring
 - Prometheus metrics and Grafana dashboards

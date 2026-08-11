@@ -143,7 +143,7 @@ router.post("/vivifi", verifyWebhookToken, async (req, res) => {
 // @route   POST /api/webhooks/fatakpay
 // @desc    Webhook postback for Fatakpay Loan status updates
 router.post("/fatakpay", verifyWebhookToken, async (req, res) => {
-  await processLenderWebhook("FATAKPAY PL", req.body, req, res);
+  await processLenderWebhook("FATAKPAY Loans", req.body, req, res);
 });
 
 module.exports = router;

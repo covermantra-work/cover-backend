@@ -1,4 +1,5 @@
 const authMiddleware = require("./authMiddleware");
+const { User } = require("../models/Users");
 
 const sanitizeSecret = (val) => {
   if (!val) return "";
@@ -16,12 +17,23 @@ const combinedAdminAuth = (req, res, next) => {
     return next();
   }
 
-  // Otherwise, require valid JWT token and check user role
-  authMiddleware(req, res, () => {
-    if (req.user && req.user.role === 'admin') {
-      next();
-    } else {
-      res.status(403).json({ message: "Access denied. Admin only." });
+  // Otherwise, require valid JWT token and check user role in DB
+  authMiddleware(req, res, async () => {
+    try {
+      if (!req.user || !req.user.phone) {
+        return res.status(403).json({ message: "Access denied. Invalid session." });
+      }
+
+      const dbUser = await User.findOne({ phone: req.user.phone });
+      if (dbUser && dbUser.role === 'admin') {
+        req.user = dbUser; // Attach full user details
+        next();
+      } else {
+        res.status(403).json({ message: "Access denied. Admin only." });
+      }
+    } catch (err) {
+      console.error("Admin Auth DB Error:", err);
+      res.status(500).json({ message: "Internal server error during authentication" });
     }
   });
 };

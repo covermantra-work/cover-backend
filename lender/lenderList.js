@@ -70,11 +70,11 @@ const lenderList = [
     isActive: false
   },
   { 
-    name: "FATAKPAY PL", 
+    name: "FATAKPAY Loans", 
     age: 20, 
     pincodes: ["123042", "500001","125042","125001"], 
     minIncome: 16000,
-    UTM:"https://web.fatakpay.com/authentication/login?utm_source=651_TT83W?utm_medium=",
+    UTM: "https://web.fatakpay.com/authentication/login?utm_source=651_TT83W&utm_medium=covermantra",
     approval: "Good",
     loanAmount: "Up to ₹2,00,000",
     interestRate: "Starting from 12% to 35.95% per month",
@@ -90,31 +90,7 @@ const lenderList = [
       "24/7 customer support"
     ],
     applyLink: "/LenderAPI/fatakPay",
-    loanTypes: ["personal"],
-    isActive: true
-  },
-  { 
-    name: "FATAKPAY DCL", 
-    age: 20, 
-    pincodes: ["123042", "500001","125042","125001"], 
-    minIncome: 16000,
-    UTM:"https://web.fatakpay.com/authentication/login?utm_source=651_TT83W?utm_medium=",
-    approval: "Good",
-    loanAmount: "Up to ₹2,00,000",
-    interestRate: "Starting from 12% to 35.95% per month",
-    processingFee: "Starting from 2.5% of the approved loan amount",
-    support: "24/7 customer support",
-    ratings: 4.0,
-    features: [
-      "Quick disbursement",
-      "Paperless process",
-      "Low processing fee",
-      "Instant approval",
-      "No hidden charges",
-      "24/7 customer support"
-    ],
-    applyLink: "/LenderAPI/fatakPaydcl",
-    loanTypes: ["instant", "short_term"],
+    loanTypes: ["instant", "personal"],
     isActive: true
   }
 ];

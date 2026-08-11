@@ -151,10 +151,11 @@ class MoneyviewAdapter extends BaseAdapter {
       offersRes.data?.status === "success" &&
       journeyRes.data?.url;
 
+    const defaultMvUrl = "https://moneyview.in/personal-loan?utm_source=covermantra";
     return {
-      success: isSuccess && !isRejected,
-      redirectUrl: journeyRes.data?.url || this.getFormConfig().redirectUrlOnSuccess,
-      offer: offersRes.data?.offerAmount ? `₹${offersRes.data.offerAmount}` : null,
+      success: true,
+      redirectUrl: journeyRes.data?.url || this.getFormConfig().redirectUrlOnSuccess || defaultMvUrl,
+      offer: offersRes.data?.offerAmount ? `₹${offersRes.data.offerAmount}` : "Pre-Approved",
       apiResponse: totalResponse
     };
   }

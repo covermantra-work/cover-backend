@@ -65,7 +65,7 @@
   },
   {
     "_id": "f1",
-    "name": "FatakPay Personal Loans",
+    "name": "FATAKPAY Loans",
     "logo": "https://www.fdplfinance.com/assets/images/logo/FatakLoans.svg",
     "age": 20,
     "minIncome": 16000,
@@ -75,7 +75,7 @@
       "125042",
       "125001"
     ],
-    "UTM": "https://web.fatakpay.com/authentication/login?utm_source=651_TT83W?utm_medium=",
+    "UTM": "https://web.fatakpay.com/authentication/login?utm_source=651_TT83W&utm_medium=covermantra",
     "priority": 3,
     "approval": "Good",
     "loanAmount": "Up to ₹2,00,000",
@@ -93,42 +93,8 @@
     ],
     "applyLink": "/LenderAPI/fatakPay",
     "loanTypes": [
-      "personal"
-    ],
-    "isActive": true
-  },
-  {
-    "_id": "f2",
-    "name": "FatakPay Short Term Loans",
-    "logo": "https://www.fdplfinance.com/assets/images/logo/FatakLoans.svg",
-    "age": 20,
-    "minIncome": 16000,
-    "pincodes": [
-      "123042",
-      "500001",
-      "125042",
-      "125001"
-    ],
-    "UTM": "https://web.fatakpay.com/authentication/login?utm_source=651_TT83W?utm_medium=",
-    "priority": 4,
-    "approval": "Good",
-    "loanAmount": "Up to ₹2,00,000",
-    "interestRate": "Starting from 12% to 35.95% per month",
-    "processingFee": "Starting from 2.5% of the approved loan amount",
-    "support": "24/7 customer support",
-    "ratings": 4,
-    "features": [
-      "Quick disbursement",
-      "Paperless process",
-      "Low processing fee",
-      "Instant approval",
-      "No hidden charges",
-      "24/7 customer support"
-    ],
-    "applyLink": "/LenderAPI/fatakPaydcl",
-    "loanTypes": [
       "instant",
-      "short_term"
+      "personal"
     ],
     "isActive": true
   },
