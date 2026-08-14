@@ -10,4 +10,4 @@ const LenderResponseSchema = new mongoose.Schema({
     }]
 });
 
-module.exports = mongoose.model("LenderResponse", LenderResponseSchema, "lender_responses");
+module.exports = mongoose.model("LenderResponse", LenderResponseSchema, "lenders_responses");

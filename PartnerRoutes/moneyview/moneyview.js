@@ -9,20 +9,20 @@ const domain = process.env.MONEYVIEW_DOMAIN;
 
 
 function isValidPAN(pan) {
-    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-    return panRegex.test(pan);
+  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+  return panRegex.test(pan);
 }
 
 
 const getToken = async () => {
 
-    const data = {
-        userName: process.env.MONEYVIEW_USERNAME,
-        password: process.env.MONEYVIEW_PASSWORD,
-        partnerCode: process.env.MONEYVIEW_CODE,
-    }
-  const tokenResponse = await axios.post(`${domain}/token`,data);
-  console.log(tokenResponse,"=========")
+  const data = {
+    userName: process.env.MONEYVIEW_USERNAME,
+    password: process.env.MONEYVIEW_PASSWORD,
+    partnerCode: process.env.MONEYVIEW_CODE,
+  }
+  const tokenResponse = await axios.post(`${domain}/token`, data);
+  console.log(tokenResponse, "=========")
   console.log("Token:", tokenResponse.data.token);
   return tokenResponse.data.token;
 };
@@ -46,60 +46,60 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "All fields are mandatory" });
     }
 
-    if(!isValidPAN(lead.pan)){
-      return res.status(409).json({message:"Pan is not valid"})
+    if (!isValidPAN(lead.pan)) {
+      return res.status(409).json({ message: "Pan is not valid" })
     }
 
     // ✅ Build request body
     const requestBody = {
-  partnerCode: 453,
-  partnerRef: "Covermantra",
-  name: lead.name?.trim(),
-  gender: lead.gender?.toLowerCase(),
-  phone: lead.phone?.toString(),
-  pan: lead.pan?.trim().toUpperCase(),
-  dateOfBirth: lead.dob,
-  bureauPermission: true,
-  employmentType:
-    lead.employment_type_id === "Self-employed"
-      ? "Self Employed"
-      : lead.employment_type_id,
-  incomeMode: "Online",
-  declaredIncome: lead.income ? parseInt(lead.income, 10) : undefined,
-  educationLevel: "Graduation",
-  maritalStatus: "Married",
-  addressList: [
-    {
-      addressLine1: lead.address?.trim(),
-      pincode: lead.pincode?.toString(),
-      residenceType: "Rented",
-      addressType: "Current",
-      city: lead.city,
-      state: lead.state,
-    },
-  ],
-  emailList: [
-    {
-      email: lead.email?.toLowerCase(),
-      type: "Primary_User",
-    },
-  ],
-  loanPurpose: "Travel",
-  consent: {
-    consentDecision: lead.consent,
-    deviceTimeStamp: lead.consent_timestamp,
-  },
-  consentDetails: {
-    consentDataList: [
-      {
-        productConsentType: "BUREAU_PULL",
-        consentValue: "GIVEN",
-        consentText: "I consent to bureau pull.",
+      partnerCode: 453,
+      partnerRef: "Covermantra",
+      name: lead.name?.trim(),
+      gender: lead.gender?.toLowerCase(),
+      phone: lead.phone?.toString(),
+      pan: lead.pan?.trim().toUpperCase(),
+      dateOfBirth: lead.dob,
+      bureauPermission: true,
+      employmentType:
+        lead.employment_type_id === "Self-employed"
+          ? "Self Employed"
+          : lead.employment_type_id,
+      incomeMode: "Online",
+      declaredIncome: lead.income ? parseInt(lead.income, 10) : undefined,
+      educationLevel: "Graduation",
+      maritalStatus: "Married",
+      addressList: [
+        {
+          addressLine1: lead.address?.trim(),
+          pincode: lead.pincode?.toString(),
+          residenceType: "Rented",
+          addressType: "Current",
+          city: lead.city,
+          state: lead.state,
+        },
+      ],
+      emailList: [
+        {
+          email: lead.email?.toLowerCase(),
+          type: "Primary_User",
+        },
+      ],
+      loanPurpose: "Travel",
+      consent: {
+        consentDecision: lead.consent,
+        deviceTimeStamp: lead.consent_timestamp,
       },
-    ],
-    deviceTimeStamp: new Date().toISOString(),
-  },
-};
+      consentDetails: {
+        consentDataList: [
+          {
+            productConsentType: "BUREAU_PULL",
+            consentValue: "GIVEN",
+            consentText: "I consent to bureau pull.",
+          },
+        ],
+        deviceTimeStamp: new Date().toISOString(),
+      },
+    };
 
     console.log("📤 Sending Lead Request:", requestBody);
 
@@ -144,7 +144,7 @@ router.post("/register", async (req, res) => {
         headers: { token },
       });
     }
-    
+
     const totalResponse = {
       leadSubmission: leadRes?.data || null,
       offers: offersRes?.data || null,
@@ -161,32 +161,32 @@ router.post("/register", async (req, res) => {
       const createdDate = `${dd}/${mm}/${yyyy}`;
 
       await LenderResponse.findOneAndUpdate(
-          { mobile: String(lead.phone) },
-          { 
-              $setOnInsert: { name: lead.name },
-              $push: { 
-                  responses: {
-                      lenderName: "MoneyView",
-                      apiResponse: totalResponse,
-                      createdDate: createdDate
-                  } 
-              }
-          },
-          { upsert: true, new: true }
+        { mobile: String(lead.phone) },
+        {
+          $setOnInsert: { name: lead.name },
+          $push: {
+            responses: {
+              lenderName: "MoneyView",
+              apiResponse: totalResponse,
+              createdDate: createdDate
+            }
+          }
+        },
+        { upsert: true, new: true }
       );
 
       // ✅ Also push to the main webuser collection
       await webusername.findOneAndUpdate(
-          { phone: String(lead.phone) },
-          {
-              $push: {
-                  lenderResponses: {
-                      lenderName: "MoneyView",
-                      apiResponse: totalResponse,
-                      createdDate: createdDate
-                  }
-              }
+        { phone: String(lead.phone) },
+        {
+          $push: {
+            lenderResponses: {
+              lenderName: "MoneyView",
+              apiResponse: totalResponse,
+              createdDate: createdDate
+            }
           }
+        }
       );
     } catch (dbErr) {
       console.error("❌ DB save failed:", dbErr.message);

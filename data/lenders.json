@@ -32,38 +32,6 @@
     "isActive": true
   },
   {
-    "_id": "m1",
-    "name": "MoneyView",
-    "logo": "https://moneyview.in/images/mv-green-logo-v3Compressed.svg",
-    "age": 20,
-    "minIncome": 20000,
-    "pincodes": [
-      "125042",
-      "125043",
-      "125042",
-      "125001"
-    ],
-    "UTM": "https://moneyview.in/personal-loan?utm_source=covermantra",
-    "priority": 2,
-    "approval": "Good",
-    "loanAmount": "Up to ₹5,00,000",
-    "interestRate": "Starting from 1.33% per month",
-    "processingFee": "Starting from 2% of the approved loan amount",
-    "support": "24/7 customer support",
-    "ratings": 4.5,
-    "features": [
-      "Direct bank transfer",
-      "Paperless process",
-      "Minimal documentation",
-      "Flexible repayment tenures"
-    ],
-    "applyLink": "/LenderAPI/moneyView",
-    "loanTypes": [
-      "personal"
-    ],
-    "isActive": false
-  },
-  {
     "_id": "f1",
     "name": "FATAKPAY Loans",
     "logo": "https://www.fdplfinance.com/assets/images/logo/FatakLoans.svg",
@@ -76,7 +44,7 @@
       "125001"
     ],
     "UTM": "https://web.fatakpay.com/authentication/login?utm_source=651_TT83W&utm_medium=covermantra",
-    "priority": 3,
+    "priority": 2,
     "approval": "Good",
     "loanAmount": "Up to ₹2,00,000",
     "interestRate": "Starting from 12% to 35.95% per month",
@@ -111,7 +79,7 @@
       "125001"
     ],
     "UTM": "https://zype.onelink.me/vx8a?af_xp=custom&pid=CustomerSource&af_dp=com.zype.mobile%3A%2F%2F&deep_link_value=myZype&af_click_lookback=30d&c=Spiraea",
-    "priority": 5,
+    "priority": 3,
     "approval": "Good",
     "loanAmount": "Up to ₹3,00,000",
     "interestRate": "Starting from 1.5% per month",
@@ -129,6 +97,38 @@
     "applyLink": "/LenderAPI/zype",
     "loanTypes": [
       "instant",
+      "personal"
+    ],
+    "isActive": false
+  },
+  {
+    "_id": "m1",
+    "name": "MoneyView",
+    "logo": "https://moneyview.in/images/mv-green-logo-v3Compressed.svg",
+    "age": 20,
+    "minIncome": 20000,
+    "pincodes": [
+      "125042",
+      "125043",
+      "125042",
+      "125001"
+    ],
+    "UTM": "https://moneyview.in/personal-loan?utm_source=covermantra",
+    "priority": 4,
+    "approval": "Good",
+    "loanAmount": "Up to ₹5,00,000",
+    "interestRate": "Starting from 1.33% per month",
+    "processingFee": "Starting from 2% of the approved loan amount",
+    "support": "24/7 customer support",
+    "ratings": 4.5,
+    "features": [
+      "Direct bank transfer",
+      "Paperless process",
+      "Minimal documentation",
+      "Flexible repayment tenures"
+    ],
+    "applyLink": "/LenderAPI/moneyView",
+    "loanTypes": [
       "personal"
     ],
     "isActive": false

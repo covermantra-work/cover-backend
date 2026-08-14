@@ -12,22 +12,22 @@ const getVivifiToken = async () => {
             UserName: process.env.VIVIFI_USERNAME,
             Password: process.env.VIVIFI_PASSWORD
         });
-        
+
         const data = response.data;
         console.log("Vivifi Auth API Raw Response:", typeof data === 'string' ? data.substring(0, 100) : data);
-        
+
         // Check if response is an array
         if (Array.isArray(data)) {
             const tokenData = data.find(item => item.Type === "AccessToken");
             return tokenData ? tokenData.Message : null;
-        } 
+        }
         // Check if response is an object
         else if (data && typeof data === 'object') {
             if (data.Type === "AccessToken") return data.Message;
             if (data.Message) return data.Message; // Some APIs just return { Message: "token" }
             if (data.AccessToken) return data.AccessToken;
             if (data.access_token) return data.access_token;
-            
+
             // If it's returning a different structure, log it
             return null;
         }
@@ -51,16 +51,16 @@ router.post("/register", async (req, res) => {
         if (!token) return res.status(500).json({ message: "Authentication Failed" });
 
         // 2. Date Format Fix (Converting YYYY-MM-DD to DD/MM/YYYY if needed)
-        let formattedDOB = lead.dob; 
+        let formattedDOB = lead.dob;
         if (lead.dob.includes("-")) {
             const [y, m, d] = lead.dob.split("-");
             formattedDOB = `${d}/${m}/${y}`;
         }
 
         const vivifiPayload = {
-            Campaign: { 
-                CampaignId: parseInt(process.env.VIVIFI_CAMPAIGN_ID), 
-                IsMobile: false 
+            Campaign: {
+                CampaignId: parseInt(process.env.VIVIFI_CAMPAIGN_ID),
+                IsMobile: false
             },
             PersonerDetails: {
                 FirstName: lead.firstName,
@@ -71,17 +71,17 @@ router.post("/register", async (req, res) => {
                 Gender: lead.gender === 'male' ? 0 : lead.gender === 'female' ? 1 : 2,
                 PanNumber: String(lead.pan).toUpperCase()
             },
-            CustomerAddressDetails: { 
+            CustomerAddressDetails: {
                 PinCode: String(lead.pincode), // Specs says String
-                ResidenceType: 1 
+                ResidenceType: 1
             },
-            CustomerIncomeDetails: { 
-                IncomeType: lead.employmentType === 'salaried' ? 6 : 2, 
-                NetIncome: parseFloat(lead.income) 
+            CustomerIncomeDetails: {
+                IncomeType: lead.employmentType === 'salaried' ? 6 : 2,
+                NetIncome: parseFloat(lead.income)
             },
-            CustomerBankDetails: { 
-                AccountNumber: lead.accountNo || "0000000000", 
-                IFSC: lead.ifsc || "SBIN0000000" 
+            CustomerBankDetails: {
+                AccountNumber: lead.accountNo || "0000000000",
+                IFSC: lead.ifsc || "SBIN0000000"
             }
         };
 
@@ -111,14 +111,14 @@ router.post("/register", async (req, res) => {
 
         await LenderResponse.findOneAndUpdate(
             { mobile: String(lead.phone) },
-            { 
+            {
                 $setOnInsert: { name: `${lead.firstName} ${lead.lastName}`.trim() },
-                $push: { 
+                $push: {
                     responses: {
                         lenderName: "Vivifi",
                         apiResponse: responseData,
                         createdDate: createdDate
-                    } 
+                    }
                 }
             },
             { upsert: true, new: true }
@@ -139,18 +139,18 @@ router.post("/register", async (req, res) => {
         );
 
         const defaultRedirectUrl = "https://online.flexsalary.com/CustomerLogin/Index?CampaignID=9192300#x";
-        return res.status(200).json({ 
-            success: true, 
-            redirectUrl: redirectUrl || defaultRedirectUrl, 
-            leadId: leadId || "FLEX-" + Date.now() 
+        return res.status(200).json({
+            success: true,
+            redirectUrl: redirectUrl || defaultRedirectUrl,
+            leadId: leadId || "FLEX-" + Date.now()
         });
 
     } catch (error) {
         console.error("Vivifi Error Details:", error.response?.data || error.message);
-        return res.status(200).json({ 
-            success: true, 
-            redirectUrl: "https://online.flexsalary.com/CustomerLogin/Index?CampaignID=9192300#x", 
-            message: "Submitted Successfully" 
+        return res.status(200).json({
+            success: true,
+            redirectUrl: "https://online.flexsalary.com/CustomerLogin/Index?CampaignID=9192300#x",
+            message: "Submitted Successfully"
         });
     }
 });

@@ -21,7 +21,34 @@ const { generateToken } = require("../utils/jwtgenerate");
 const lenderList = require("../lender/lenderList");
 const Lender = require("../models/Lender");
 const Contact = require("../models/Contact");
+const fs = require("fs");
+const path = require("path");
 const otpStorage = new Map();
+
+const lendersFilePath = path.join(__dirname, "../data/lenders.json");
+
+const getStoredLenders = async () => {
+  try {
+    if (fs.existsSync(lendersFilePath)) {
+      const data = fs.readFileSync(lendersFilePath, "utf8");
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.error("Error reading lenders file in userRoutes:", err.message);
+  }
+  try {
+    const dbLenders = await Lender.find().sort({ priority: 1 });
+    if (dbLenders && dbLenders.length > 0) {
+      return dbLenders;
+    }
+  } catch (dbError) {
+    console.error("MongoDB Lender fetch failed, falling back to static list:", dbError.message);
+  }
+  return lenderList;
+};
 
 //update
 require('dotenv').config();
@@ -56,22 +83,14 @@ router.post("/eligibility", async (req, res) => {
     return res.json({ eligible: false, message: "Age must be greater than 18" });
   }
 
-  // Fetch lenders from DB, fallback to static list if DB fails (e.g. permission error)
-  let activeLenders = lenderList;
-  try {
-    const dbLenders = await Lender.find().sort({ priority: 1 });
-    if (dbLenders && dbLenders.length > 0) {
-      activeLenders = dbLenders;
-    }
-  } catch (dbError) {
-    console.error("MongoDB Lender fetch failed, falling back to static list:", dbError.message);
-  }
+  const allLenders = await getStoredLenders();
 
   // Filter lenders based on age, income, pincode, and active status
-  const eligibleLenders = activeLenders.filter((lender) => {
-    const ageMatch = age >= lender.age;
-    const incomeMatch = income >= lender.minIncome;
-    const pincodeMatch = lender.pincodes.includes("*") || lender.pincodes.includes(pincode);
+  const eligibleLenders = allLenders.filter((lender) => {
+    const ageMatch = Number(age) >= Number(lender.age);
+    const incomeMatch = Number(income) >= Number(lender.minIncome);
+    const pincodesArr = Array.isArray(lender.pincodes) ? lender.pincodes : [];
+    const pincodeMatch = pincodesArr.includes("*") || pincodesArr.includes(String(pincode));
     const activeMatch = lender.isActive !== false;
 
     return ageMatch && incomeMatch && pincodeMatch && activeMatch;
@@ -536,26 +555,21 @@ router.post("/filter-lenders", authMiddleware, async (req, res) => {
     const ageDiff = Date.now() - birthDate.getTime();
     const userAge = new Date(ageDiff).getUTCFullYear() - 1970;
 
-    // Fetch lenders from DB, fallback to static list if DB fails
-    let activeLenders = lenderList;
-    try {
-      const dbLenders = await Lender.find().sort({ priority: 1 });
-      if (dbLenders && dbLenders.length > 0) {
-        activeLenders = dbLenders;
-      }
-    } catch (dbError) {
-      console.error("MongoDB Lender fetch failed, falling back to static list:", dbError.message);
-    }
+    // Fetch lenders from single source of truth
+    const allLenders = await getStoredLenders();
 
     // Filter lenders
-    const filtered = activeLenders.filter((lender) => {
+    const filtered = allLenders.filter((lender) => {
       const lenderAge = Number(lender.age);
       const pincodesArr = Array.isArray(lender.pincodes) ? lender.pincodes : [];
+      const pincodeMatch = pincodesArr.includes("*") || pincodesArr.includes(String(pincode));
+      const activeMatch = lender.isActive !== false;
 
       return (
+        activeMatch &&
         userAge >= lenderAge &&
-        userIncome >= lender.minIncome &&
-        pincodesArr.includes(String(pincode))
+        userIncome >= Number(lender.minIncome) &&
+        pincodeMatch
       );
     });
 
@@ -568,8 +582,16 @@ router.post("/filter-lenders", authMiddleware, async (req, res) => {
     }
 
     const lendersInfo = filtered.map((l) => ({
+      _id: l._id,
       name: l.name,
-      UTM: l.UTM,
+      logo: l.logo || "",
+      UTM: l.UTM || "",
+      applyLink: l.applyLink || l.UTM || "",
+      loanAmount: l.loanAmount || "Up to ₹5,00,000",
+      interestRate: l.interestRate || "Starting from 1.5% per month",
+      processingFee: l.processingFee || "Starting from 2%",
+      ratings: l.ratings || 4.5,
+      features: l.features || [],
       requiredMinAge: l.age,
       requiredMinIncome: l.minIncome
     }));

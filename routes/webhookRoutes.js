@@ -36,7 +36,7 @@ const verifyWebhookToken = (req, res, next) => {
 // Unified Helper to process a webhook payload and update MongoDB
 const processLenderWebhook = async (lenderName, payload, req, res) => {
   const { phone, mobile, phoneNumber, mobileNumber, status, loanStatus, stage, amount, loanAmount, approvedAmount } = payload;
-  
+
   const rawPhone = phone || mobile || phoneNumber || mobileNumber;
   const rawStatus = status || loanStatus || stage;
   const rawAmount = amount || loanAmount || approvedAmount;
@@ -48,7 +48,7 @@ const processLenderWebhook = async (lenderName, payload, req, res) => {
 
   const phone10 = sanitizePhone(rawPhone);
   const normalizedStatus = String(rawStatus || "applied").toLowerCase();
-  
+
   // Map incoming status string to our User model enum: applied, approved, rejected, disbursed, none
   let mappedStatus = "applied";
   if (["approve", "approved", "accept", "accepted", "eligible", "offer"].some(s => normalizedStatus.includes(s))) {

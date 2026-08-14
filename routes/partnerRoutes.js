@@ -122,10 +122,40 @@ router.post("/:lenderId/register", authMiddleware, async (req, res) => {
       }
     }
 
-    // 3. Return standardized result
+    // 3. Return standardized result with dynamic auto-fill parameters
+    let finalRedirectUrl = result.redirectUrl || "";
+    if (finalRedirectUrl) {
+      const phone = req.body.phone || req.body.mobile || (req.user && req.user.phone) || "";
+      const pincode = req.body.pincode || (req.user && req.user.pincode) || "";
+      const salary = req.body.income || req.body.salary || (req.user && req.user.income) || "";
+
+      try {
+        const urlObj = new URL(finalRedirectUrl.startsWith("http") ? finalRedirectUrl : `https://${finalRedirectUrl}`);
+        if (phone) {
+          urlObj.searchParams.set("phone", String(phone));
+          urlObj.searchParams.set("mobile", String(phone));
+        }
+        if (pincode) urlObj.searchParams.set("pincode", String(pincode));
+        if (salary) urlObj.searchParams.set("salary", String(salary));
+        finalRedirectUrl = urlObj.toString();
+      } catch (urlErr) {
+        const separator = finalRedirectUrl.includes("?") ? "&" : "?";
+        let params = [];
+        if (phone) {
+          params.push(`phone=${phone}`);
+          params.push(`mobile=${phone}`);
+        }
+        if (pincode) params.push(`pincode=${pincode}`);
+        if (salary) params.push(`salary=${salary}`);
+        if (params.length > 0) {
+          finalRedirectUrl = `${finalRedirectUrl}${separator}${params.join("&")}`;
+        }
+      }
+    }
+
     res.status(200).json({
       success: result.success,
-      redirectUrl: result.redirectUrl,
+      redirectUrl: finalRedirectUrl,
       offer: result.offer,
       totalresponse: result.apiResponse
     });

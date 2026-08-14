@@ -124,32 +124,32 @@ router.post("/register", async (req, res) => {
       const createdDate = `${dd}/${mm}/${yyyy}`;
 
       await LenderResponse.findOneAndUpdate(
-          { mobile: String(lead.phone) },
-          { 
-              $setOnInsert: { name: lead.name },
-              $push: { 
-                  responses: {
-                      lenderName: "Zype",
-                      apiResponse: totalresponse, // Saving both dedupe and apires
-                      createdDate: createdDate
-                  } 
-              }
-          },
-          { upsert: true, new: true }
+        { mobile: String(lead.phone) },
+        {
+          $setOnInsert: { name: lead.name },
+          $push: {
+            responses: {
+              lenderName: "Zype",
+              apiResponse: totalresponse, // Saving both dedupe and apires
+              createdDate: createdDate
+            }
+          }
+        },
+        { upsert: true, new: true }
       );
 
       // ✅ Also push to the main webuser collection
       await webusername.findOneAndUpdate(
-          { phone: String(lead.phone) },
-          {
-              $push: {
-                  lenderResponses: {
-                      lenderName: "Zype",
-                      apiResponse: totalresponse,
-                      createdDate: createdDate
-                  }
-              }
+        { phone: String(lead.phone) },
+        {
+          $push: {
+            lenderResponses: {
+              lenderName: "Zype",
+              apiResponse: totalresponse,
+              createdDate: createdDate
+            }
           }
+        }
       );
     } catch (dbErr) {
       console.error("❌ DB save failed:", dbErr.message);

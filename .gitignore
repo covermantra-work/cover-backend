@@ -11,3 +11,5 @@ coverage/
 # Ignore all markdown files except README
 *.md
 !README.md
+.agent/
+.antigravity/ 

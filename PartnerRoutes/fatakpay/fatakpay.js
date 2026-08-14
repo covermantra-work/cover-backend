@@ -21,7 +21,7 @@ async function get_token() {
             password: process.env.FATAKPAY_PASSWORD,
         };
         const apires = await axios.post(`${domain}/create-user-token`, data);
-        return apires.data?.data?.token; 
+        return apires.data?.data?.token;
     } catch (error) {
         console.error("Error fetching token:", error.response?.data || error.message);
         throw new Error("Failed to fetch token");
@@ -37,7 +37,7 @@ async function get_token_dcl() {
             password: process.env.FATAKPAY_PASSWORD_DCL,
         };
         const apires = await axios.post(`${domain}/create-user-token`, data);
-        return apires.data?.data?.token; 
+        return apires.data?.data?.token;
     } catch (error) {
         console.error("Error fetching token:", error.response?.data || error.message);
         throw new Error("Failed to fetch token");
@@ -59,18 +59,18 @@ router.post("/register/Pl", async (req, res) => {
             consent
         } = req.body;
 
-        if (!pan || !mobile || !first_name || !last_name || !dob || !email || !employment_type_id || !pincode||!consent_timestamp) {
+        if (!pan || !mobile || !first_name || !last_name || !dob || !email || !employment_type_id || !pincode || !consent_timestamp) {
             return res.status(400).json({ message: "All fields are required" });
         }
-        if(!isValidPAN(pan)){
-            return  res.status(409).json({message:"Pan is not valid"})
+        if (!isValidPAN(pan)) {
+            return res.status(409).json({ message: "Pan is not valid" })
         }
 
         const token = await get_token();
         if (!token) {
             return res.status(500).json({ message: "Token not received" });
         }
-        
+
         const userData = {
             mobile,
             first_name,
@@ -101,14 +101,14 @@ router.post("/register/Pl", async (req, res) => {
 
         await LenderResponse.findOneAndUpdate(
             { mobile: String(mobile) },
-            { 
+            {
                 $setOnInsert: { name: `${first_name} ${last_name}`.trim() },
-                $push: { 
+                $push: {
                     responses: {
                         lenderName: "FATAKPAY Loans",
                         apiResponse: apiFatakpay.data,
                         createdDate: createdDate
-                    } 
+                    }
                 }
             },
             { upsert: true, new: true }
@@ -173,18 +173,18 @@ router.post("/register/dcl", async (req, res) => {
             consent
         } = req.body;
 
-        if (!pan || !mobile || !first_name || !last_name || !dob || !email || !employment_type_id || !pincode||!consent_timestamp) {
+        if (!pan || !mobile || !first_name || !last_name || !dob || !email || !employment_type_id || !pincode || !consent_timestamp) {
             return res.status(400).json({ message: "All fields are required" });
         }
-        if(!isValidPAN(pan)){
-            return  res.status(409).json({message:"Pan is not valid"})
+        if (!isValidPAN(pan)) {
+            return res.status(409).json({ message: "Pan is not valid" })
         }
 
         const token = await get_token_dcl();
         if (!token) {
             return res.status(500).json({ message: "Token not received" });
         }
-        
+
         const userData = {
             mobile,
             first_name,
@@ -215,14 +215,14 @@ router.post("/register/dcl", async (req, res) => {
 
         await LenderResponse.findOneAndUpdate(
             { mobile: String(mobile) },
-            { 
+            {
                 $setOnInsert: { name: `${first_name} ${last_name}`.trim() },
-                $push: { 
+                $push: {
                     responses: {
                         lenderName: "FATAKPAY Loans",
                         apiResponse: apiFatakpay.data,
                         createdDate: createdDate
-                    } 
+                    }
                 }
             },
             { upsert: true, new: true }

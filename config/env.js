@@ -14,9 +14,9 @@ function validateEnv() {
     console.warn(`⚠️ Warning: Missing required environment variables: ${missing.join(", ")}`);
   }
 
-  // Warn if JWT_SECRET is using default fallback
-  if (!process.env.JWT_SECRET) {
-    console.warn("⚠️ Warning: JWT_SECRET is not set in .env. Using fallback secret (not recommended for production).");
+  // Warn if neither JWT_SECRECT nor JWT_SECRET is set
+  if (!process.env.JWT_SECRECT && !process.env.JWT_SECRET) {
+    console.warn("⚠️ Warning: JWT_SECRECT is not set in .env. Using fallback secret (not recommended for production).");
   }
 }
 
@@ -26,6 +26,7 @@ module.exports = {
   PORT: process.env.PORT || 5001,
   NODE_ENV: process.env.NODE_ENV || "development",
   MONGO_URL: process.env.MONGO_URL,
-  JWT_SECRET: process.env.JWT_SECRET || "fallback_default_jwt_secret_key",
+  JWT_SECRECT: process.env.JWT_SECRECT || process.env.JWT_SECRET || "fallback_default_jwt_secret_key",
+  JWT_SECRET: process.env.JWT_SECRECT || process.env.JWT_SECRET || "fallback_default_jwt_secret_key",
   ADMIN_SECRET: process.env.ADMIN_SECRET || "covermantra_super_admin_secret_2026",
 };
