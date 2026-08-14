@@ -22,6 +22,9 @@ if (webusername.collection.name === LenderResponse.collection.name) {
 
 const app = express();
 
+// Enable trust proxy for Nginx / Cloudflare load balancers to read actual client IPs
+app.set("trust proxy", 1);
+
 // 1. Security Headers
 app.use(
   helmet({

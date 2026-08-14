@@ -4,9 +4,11 @@ const router = express.Router();
 const authMiddleware = require("../middlewares/authMiddleware");
 const rateLimit = require("express-rate-limit");
 
+const isDevMode = process.env.NODE_ENV === "development" || process.env.ALLOW_TEST_BYPASS === "true";
+
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
+  max: isDevMode ? 1000 : 5,
   message: { message: "You have requested too many OTPs. Please try again after 15 minutes for security reasons." }
 });
 
