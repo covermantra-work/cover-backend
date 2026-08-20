@@ -92,6 +92,30 @@ const lenderList = [
     applyLink: "/LenderAPI/fatakPay",
     loanTypes: ["instant", "personal"],
     isActive: true
+  },
+  {
+    name: "Credify",
+    age: 21,
+    pincodes: ["*", "!18", "!19", "!78", "!79"],
+    minIncome: 20000,
+    UTM: "https://loan.credittnow.com/auth/login?utm_source=cover_mantra&utm_medium=website&utm_campaign=loan_campaign",
+    approval: "Good",
+    loanAmount: "₹8,000 to ₹35,000",
+    interestRate: "Starting from 0.1% - 0.2% per day",
+    processingFee: "Approximately 6% - 7% of the sanctioned loan amount",
+    support: "24/7 customer support",
+    ratings: 4.3,
+    features: [
+      "Instant Approval & Disbursal within 15 min",
+      "100% Digital Journey (Zero Paperwork)",
+      "Min CIBIL: 680 (salary >= 30k) or 720 (salary 20k-30k)",
+      "No Credit History / Prepayment Charges",
+      "Salaried Only (Income >= 20k)",
+      "Tenure: Up to 45 days (No EMI)"
+    ],
+    applyLink: "/LenderAPI/credify",
+    loanTypes: ["instant", "personal"],
+    isActive: true
   }
 ];
 

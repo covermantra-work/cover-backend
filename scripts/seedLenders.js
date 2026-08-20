@@ -24,6 +24,11 @@ const lendersWithLogos = [
     logo: "https://www.vivifin.com/images/vivifi-logo.png",
     dbNameMatch: "VIVIFI"
   },
+  {
+    name: "Credify",
+    logo: "https://loan.credittnow.com/favicon.ico",
+    dbNameMatch: "Credify"
+  },
 ];
 
 const seedLenders = async () => {

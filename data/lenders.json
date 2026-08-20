@@ -32,6 +32,42 @@
     "isActive": true
   },
   {
+    "_id": "c1",
+    "name": "Credify",
+    "logo": "https://loan.credittnow.com/favicon.ico",
+    "age": 21,
+    "minIncome": 20000,
+    "pincodes": [
+      "*",
+      "!18",
+      "!19",
+      "!78",
+      "!79"
+    ],
+    "UTM": "https://loan.credittnow.com/auth/login?utm_source=cover_mantra&utm_medium=website&utm_campaign=loan_campaign",
+    "priority": 2,
+    "approval": "Good",
+    "loanAmount": "₹8,000 to ₹35,000",
+    "interestRate": "Starting from 0.1% - 0.2% per day",
+    "processingFee": "Approximately 6% - 7% of the sanctioned loan amount",
+    "support": "24/7 customer support",
+    "ratings": 4.3,
+    "features": [
+      "Instant Approval & Disbursal within 15 min",
+      "100% Digital Journey (Zero Paperwork)",
+      "Min CIBIL: 680 (salary >= 30k) or 720 (salary 20k-30k)",
+      "No Credit History / Prepayment Charges",
+      "Salaried Only (Income >= 20k)",
+      "Tenure: Up to 45 days (No EMI)"
+    ],
+    "applyLink": "/LenderAPI/credify",
+    "loanTypes": [
+      "instant",
+      "personal"
+    ],
+    "isActive": true
+  },
+  {
     "_id": "f1",
     "name": "FATAKPAY Loans",
     "logo": "https://www.fdplfinance.com/assets/images/logo/FatakLoans.svg",
@@ -44,7 +80,7 @@
       "125001"
     ],
     "UTM": "https://web.fatakpay.com/authentication/login?utm_source=651_TT83W&utm_medium=covermantra",
-    "priority": 2,
+    "priority": 3,
     "approval": "Good",
     "loanAmount": "Up to ₹2,00,000",
     "interestRate": "Starting from 12% to 35.95% per month",
@@ -79,7 +115,7 @@
       "125001"
     ],
     "UTM": "https://zype.onelink.me/vx8a?af_xp=custom&pid=CustomerSource&af_dp=com.zype.mobile%3A%2F%2F&deep_link_value=myZype&af_click_lookback=30d&c=Spiraea",
-    "priority": 3,
+    "priority": 4,
     "approval": "Good",
     "loanAmount": "Up to ₹3,00,000",
     "interestRate": "Starting from 1.5% per month",
@@ -114,7 +150,7 @@
       "125001"
     ],
     "UTM": "https://moneyview.in/personal-loan?utm_source=covermantra",
-    "priority": 4,
+    "priority": 5,
     "approval": "Good",
     "loanAmount": "Up to ₹5,00,000",
     "interestRate": "Starting from 1.33% per month",

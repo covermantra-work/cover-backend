@@ -92,7 +92,8 @@ router.post("/eligibility", async (req, res) => {
     const ageMatch = Number(age) >= Number(lender.age);
     const incomeMatch = Number(income) >= Number(lender.minIncome);
     const pincodesArr = Array.isArray(lender.pincodes) ? lender.pincodes : [];
-    const pincodeMatch = pincodesArr.includes("*") || pincodesArr.includes(String(pincode));
+    const isBlacklisted = pincodesArr.some(p => typeof p === "string" && p.startsWith("!") && String(pincode).startsWith(p.slice(1)));
+    const pincodeMatch = !isBlacklisted && (pincodesArr.includes("*") || pincodesArr.includes(String(pincode)));
     const activeMatch = lender.isActive !== false;
 
     return ageMatch && incomeMatch && pincodeMatch && activeMatch;
@@ -564,7 +565,8 @@ router.post("/filter-lenders", authMiddleware, async (req, res) => {
     const filtered = allLenders.filter((lender) => {
       const lenderAge = Number(lender.age);
       const pincodesArr = Array.isArray(lender.pincodes) ? lender.pincodes : [];
-      const pincodeMatch = pincodesArr.includes("*") || pincodesArr.includes(String(pincode));
+      const isBlacklisted = pincodesArr.some(p => typeof p === "string" && p.startsWith("!") && String(pincode).startsWith(p.slice(1)));
+      const pincodeMatch = !isBlacklisted && (pincodesArr.includes("*") || pincodesArr.includes(String(pincode)));
       const activeMatch = lender.isActive !== false;
 
       return (
