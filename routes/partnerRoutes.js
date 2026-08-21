@@ -71,58 +71,24 @@ router.post("/:lenderId/register", authMiddleware, async (req, res) => {
   }
 
   try {
-    // 1. Submit lead to adapter
-    const result = await adapter.register(req.body);
-
-    // 2. Perform centralized DB logging
-    const mobile = req.body.phone || req.body.mobile;
-    const name = req.body.name || `${req.body.first_name || ""} ${req.body.last_name || ""}`.trim();
-
-    if (mobile) {
-      try {
-        const today = new Date();
-        const dd = String(today.getDate()).padStart(2, '0');
-        const mm = String(today.getMonth() + 1).padStart(2, '0');
-        const yyyy = today.getFullYear();
-        const createdDate = `${dd}/${mm}/${yyyy}`;
-
-        const lenderName = adapter.getFormConfig().title;
-
-        // Save to LenderResponse collection
-        await LenderResponse.findOneAndUpdate(
-          { mobile: String(mobile) },
-          {
-            $setOnInsert: { name: name },
-            $push: {
-              responses: {
-                lenderName: lenderName,
-                apiResponse: result.apiResponse,
-                createdDate: createdDate
-              }
-            }
-          },
-          { upsert: true, new: true }
-        );
-
-        // Push response log to Main Webuser collection
-        await webusername.findOneAndUpdate(
-          { phone: String(mobile) },
-          {
-            $push: {
-              lenderResponses: {
-                lenderName: lenderName,
-                apiResponse: result.apiResponse,
-                createdDate: createdDate
-              }
-            }
-          }
-        );
-      } catch (dbErr) {
-        console.error("❌ DB logging failed in dynamic router:", dbErr.message);
-      }
+    // 1. Submit lead to adapter (Optionally bypass external API calls)
+    const shouldBypassApi = process.env.BYPASS_EXTERNAL_APIS !== "false";
+    
+    let result;
+    if (shouldBypassApi) {
+      console.log(`[partnerRoutes] Bypassing external API call for lender: ${lenderId}`);
+      const config = adapter.getFormConfig();
+      result = {
+        success: true,
+        redirectUrl: config.redirectUrlOnSuccess || "",
+        offer: "Pre-Approved",
+        apiResponse: { status: "CAPTURED", message: "Form submitted and lead saved locally (API call bypassed)" }
+      };
+    } else {
+      result = await adapter.register(req.body);
     }
 
-    // 3. Return standardized result with dynamic auto-fill parameters
+    // 2. Determine final redirect url (with dynamic query parameters)
     let finalRedirectUrl = result.redirectUrl || "";
     if (finalRedirectUrl) {
       const phone = req.body.phone || req.body.mobile || (req.user && req.user.phone) || "";
@@ -153,6 +119,50 @@ router.post("/:lenderId/register", authMiddleware, async (req, res) => {
       }
     }
 
+    // 3. Perform centralized DB logging
+    const mobile = req.body.phone || req.body.mobile;
+    const name = req.body.name || `${req.body.first_name || ""} ${req.body.last_name || ""}`.trim();
+
+    if (mobile) {
+      try {
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
+        const createdDate = `${dd}/${mm}/${yyyy}`;
+
+        const lenderName = adapter.getFormConfig().title;
+
+        // Save to LenderResponse collection
+        await LenderResponse.findOneAndUpdate(
+          { mobile: String(mobile) },
+          {
+            $setOnInsert: { name: name },
+            $push: {
+              responses: {
+                lenderName: lenderName
+              }
+            }
+          },
+          { upsert: true, new: true }
+        );
+
+        // Push response log to Main Webuser collection
+        await webusername.findOneAndUpdate(
+          { phone: String(mobile) },
+          {
+            $push: {
+              lenderResponses: {
+                lenderName: lenderName
+              }
+            }
+          }
+        );
+      } catch (dbErr) {
+        console.error("❌ DB logging failed in dynamic router:", dbErr.message);
+      }
+    }
+
     res.status(200).json({
       success: result.success,
       redirectUrl: finalRedirectUrl,
@@ -167,6 +177,102 @@ router.post("/:lenderId/register", authMiddleware, async (req, res) => {
       message: "Lead registration failed",
       error: error.message
     });
+  }
+});
+
+// @route   GET /api/partners/click-redirect
+// @desc    Redirect to lender's external UTM link and log the click
+// @access  Public
+router.get("/click-redirect", async (req, res) => {
+  const { lenderId, phone } = req.query;
+
+  if (!lenderId) {
+    return res.status(400).send("Lender ID is required");
+  }
+
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const lendersFilePath = path.join(__dirname, '../data/lenders.json');
+    
+    let lenders = [];
+    if (fs.existsSync(lendersFilePath)) {
+      lenders = JSON.parse(fs.readFileSync(lendersFilePath, 'utf8'));
+    }
+    
+    const lender = lenders.find(l => String(l._id) === String(lenderId));
+    if (!lender) {
+      return res.status(404).send("Lender not found");
+    }
+
+    const targetUrl = lender.UTM || lender.applyLink;
+    if (!targetUrl) {
+      return res.status(400).send("No redirect URL configured for this lender");
+    }
+
+    // Perform DB logging if phone is provided
+    if (phone) {
+      const today = new Date();
+      const dd = String(today.getDate()).padStart(2, '0');
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const yyyy = today.getFullYear();
+      const createdDate = `${dd}/${mm}/${yyyy}`;
+
+      const apiResponse = { status: "CLICKED", message: "User clicked direct apply link" };
+
+      // Find user name if possible
+      let userName = "App/Web User";
+      const user = await webusername.findOne({ phone: String(phone) });
+      if (user && user.name) {
+        userName = user.name;
+      }
+
+      // Save to LenderResponse collection
+      await LenderResponse.findOneAndUpdate(
+        { mobile: String(phone) },
+        {
+          $setOnInsert: { name: userName },
+          $push: {
+            responses: {
+              lenderName: lender.name
+            }
+          }
+        },
+        { upsert: true, new: true }
+      );
+
+      // Push response log to Main Webuser collection
+      await webusername.findOneAndUpdate(
+        { phone: String(phone) },
+        {
+          $push: {
+            lenderResponses: {
+              lenderName: lender.name
+            }
+          }
+        }
+      );
+    }
+
+    // Decorate targetUrl with phone/mobile parameters if needed
+    let finalTargetUrl = targetUrl;
+    if (phone) {
+      try {
+        const urlObj = new URL(finalTargetUrl.startsWith("http") ? finalTargetUrl : `https://${finalTargetUrl}`);
+        urlObj.searchParams.set("phone", String(phone));
+        urlObj.searchParams.set("mobile", String(phone));
+        finalTargetUrl = urlObj.toString();
+      } catch (urlErr) {
+        const separator = finalTargetUrl.includes("?") ? "&" : "?";
+        finalTargetUrl = `${finalTargetUrl}${separator}phone=${phone}&mobile=${phone}`;
+      }
+    }
+
+    res.redirect(finalTargetUrl);
+
+  } catch (error) {
+    console.error("Error in click-redirect:", error);
+    res.status(500).send("An error occurred during redirect");
   }
 });
 

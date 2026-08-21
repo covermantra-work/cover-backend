@@ -14,9 +14,7 @@ const userSchema = new mongoose.Schema({
     income: { type: String, required: true },
     pincode: { type: String, required: true },
     lenderResponses: [{
-        lenderName: { type: String },
-        apiResponse: { type: mongoose.Schema.Types.Mixed },
-        createdDate: { type: String }
+        lenderName: { type: String }
     }],
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     // App and Tracking fields

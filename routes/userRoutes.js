@@ -585,20 +585,35 @@ router.post("/filter-lenders", authMiddleware, async (req, res) => {
       });
     }
 
-    const lendersInfo = filtered.map((l) => ({
-      _id: l._id,
-      name: l.name,
-      logo: l.logo || "",
-      UTM: l.UTM || "",
-      applyLink: l.applyLink || l.UTM || "",
-      loanAmount: l.loanAmount || "Up to ₹5,00,000",
-      interestRate: l.interestRate || "Starting from 1.5% per month",
-      processingFee: l.processingFee || "Starting from 2%",
-      ratings: l.ratings || 4.5,
-      features: l.features || [],
-      requiredMinAge: l.age,
-      requiredMinIncome: l.minIncome
-    }));
+    const lendersInfo = filtered.map((l) => {
+      const baseUrl = `${req.protocol}://${req.headers.host}`;
+      const originalUtm = l.UTM || "";
+      const originalApplyLink = l.applyLink || originalUtm || "";
+
+      let finalUtm = originalUtm;
+      let finalApplyLink = originalApplyLink;
+
+      // If it's an external link, route it through our redirect handler for tracking
+      if (originalApplyLink.startsWith("http")) {
+        finalApplyLink = `${baseUrl}/api/partners/click-redirect?lenderId=${l._id}&phone=${phone}`;
+        finalUtm = finalApplyLink;
+      }
+
+      return {
+        _id: l._id,
+        name: l.name,
+        logo: l.logo || "",
+        UTM: finalUtm,
+        applyLink: finalApplyLink,
+        loanAmount: l.loanAmount || "Up to ₹5,00,000",
+        interestRate: l.interestRate || "Starting from 1.5% per month",
+        processingFee: l.processingFee || "Starting from 2%",
+        ratings: l.ratings || 4.5,
+        features: l.features || [],
+        requiredMinAge: l.age,
+        requiredMinIncome: l.minIncome
+      };
+    });
 
     return res.status(200).json({
       eligible: true,

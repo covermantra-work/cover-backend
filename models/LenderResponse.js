@@ -4,9 +4,7 @@ const LenderResponseSchema = new mongoose.Schema({
     name: { type: String, required: true },
     mobile: { type: String, required: true, unique: true },
     responses: [{
-        lenderName: { type: String, required: true },
-        apiResponse: { type: mongoose.Schema.Types.Mixed },
-        createdDate: { type: String, required: true }
+        lenderName: { type: String, required: true }
     }]
 });
 
