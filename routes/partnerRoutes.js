@@ -122,6 +122,7 @@ router.post("/:lenderId/register", authMiddleware, async (req, res) => {
     // 3. Perform centralized DB logging
     const mobile = req.body.phone || req.body.mobile;
     const name = req.body.name || `${req.body.first_name || ""} ${req.body.last_name || ""}`.trim();
+    const pincode = req.body.pincode || (req.user && req.user.pincode) || "";
 
     if (mobile) {
       try {
@@ -140,7 +141,10 @@ router.post("/:lenderId/register", authMiddleware, async (req, res) => {
             $setOnInsert: { name: name },
             $push: {
               responses: {
-                lenderName: lenderName
+                lenderName: lenderName,
+                pincode: String(pincode),
+                redirectUrl: finalRedirectUrl,
+                appliedAt: new Date()
               }
             }
           },
@@ -220,11 +224,45 @@ router.get("/click-redirect", async (req, res) => {
 
       const apiResponse = { status: "CLICKED", message: "User clicked direct apply link" };
 
-      // Find user name if possible
+      // Find user name and pincode if possible
       let userName = "App/Web User";
+      let userPincode = "";
       const user = await webusername.findOne({ phone: String(phone) });
-      if (user && user.name) {
-        userName = user.name;
+      if (user) {
+        if (user.name) userName = user.name;
+        if (user.pincode) userPincode = user.pincode;
+      }
+
+      // Decorate targetUrl with phone/mobile and other parameters
+      let finalTargetUrl = targetUrl;
+      try {
+        const urlObj = new URL(finalTargetUrl.startsWith("http") ? finalTargetUrl : `https://${finalTargetUrl}`);
+        if (phone) {
+          urlObj.searchParams.set("phone", String(phone));
+          urlObj.searchParams.set("mobile", String(phone));
+        }
+        if (userPincode) urlObj.searchParams.set("pincode", String(userPincode));
+        if (user && user.income) urlObj.searchParams.set("salary", String(user.income));
+        
+        // Append all incoming tracking parameters (such as utm_source, utm_id, etc.)
+        Object.keys(req.query).forEach(key => {
+          if (key !== 'lenderId' && key !== 'phone') {
+            urlObj.searchParams.set(key, String(req.query[key]));
+          }
+        });
+        
+        finalTargetUrl = urlObj.toString();
+      } catch (urlErr) {
+        const separator = finalTargetUrl.includes("?") ? "&" : "?";
+        let params = [];
+        if (phone) {
+          params.push(`phone=${phone}`);
+          params.push(`mobile=${phone}`);
+        }
+        if (userPincode) params.push(`pincode=${userPincode}`);
+        if (params.length > 0) {
+          finalTargetUrl = `${finalTargetUrl}${separator}${params.join("&")}`;
+        }
       }
 
       // Save to LenderResponse collection
@@ -234,7 +272,10 @@ router.get("/click-redirect", async (req, res) => {
           $setOnInsert: { name: userName },
           $push: {
             responses: {
-              lenderName: lender.name
+              lenderName: lender.name,
+              pincode: String(userPincode),
+              redirectUrl: finalTargetUrl,
+              appliedAt: new Date()
             }
           }
         },
@@ -252,23 +293,11 @@ router.get("/click-redirect", async (req, res) => {
           }
         }
       );
+      
+      res.redirect(finalTargetUrl);
+    } else {
+      res.redirect(targetUrl);
     }
-
-    // Decorate targetUrl with phone/mobile parameters if needed
-    let finalTargetUrl = targetUrl;
-    if (phone) {
-      try {
-        const urlObj = new URL(finalTargetUrl.startsWith("http") ? finalTargetUrl : `https://${finalTargetUrl}`);
-        urlObj.searchParams.set("phone", String(phone));
-        urlObj.searchParams.set("mobile", String(phone));
-        finalTargetUrl = urlObj.toString();
-      } catch (urlErr) {
-        const separator = finalTargetUrl.includes("?") ? "&" : "?";
-        finalTargetUrl = `${finalTargetUrl}${separator}phone=${phone}&mobile=${phone}`;
-      }
-    }
-
-    res.redirect(finalTargetUrl);
 
   } catch (error) {
     console.error("Error in click-redirect:", error);
