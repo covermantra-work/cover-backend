@@ -135,7 +135,7 @@
       "instant",
       "personal"
     ],
-    "isActive": true
+    "isActive": false
   },
   {
     "_id": "m1",
@@ -167,6 +167,6 @@
     "loanTypes": [
       "personal"
     ],
-    "isActive": true
+    "isActive": false
   }
 ]
