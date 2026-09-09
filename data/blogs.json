@@ -1,0 +1,386 @@
+[
+  {
+    "_id": "b1",
+    "id": 1,
+    "slug": "understanding-insurance-financial-security-foundation",
+    "legacyId": "Blog1",
+    "title": "Understanding Insurance: Financial Security Foundation",
+    "subtitle": "What If You Had To Choose: Savings or Future? The Quiet Power of Being Prepared",
+    "description": "Protect what matters most. Insurance offers financial security against life's unexpected events, giving you and your family lasting peace of mind.",
+    "category": "Insurance",
+    "coverImage": "https://media.istockphoto.com/id/1226082621/photo/insurance-concept-stack-of-wooden-blocks-with-words-life-health-legal-expenses-business-house.jpg?s=612x612&w=0&k=20&c=5bKk7pRl9jewZM_nmIquyGOj4Q7BVNiYRcJC9H1smfE=",
+    "postedDate": "Sep 5, 2025",
+    "readTime": "6 min read",
+    "author": {
+      "name": "CoverMantra Insurance Advisory",
+      "role": "Protection & Risk Research Desk",
+      "avatar": "/image/logo.png"
+    },
+    "tags": ["Insurance", "Health Insurance", "Financial Security", "Life Insurance", "Risk Management"],
+    "featured": true,
+    "isActive": true,
+    "createdAt": "2025-09-05T10:00:00.000Z",
+    "sections": [
+      {
+        "title": "The Quiet Reality of the Unexpected",
+        "type": "quote",
+        "quote": "Every day, you work hard, save diligently, and plan for a brighter tomorrow. You're building a life—a home, a career, a legacy. But nestled within this beautiful construction is a quiet, powerful fear: the unexpected.",
+        "paragraphs": [
+          "A sudden medical emergency, a critical illness, a car accident, or a natural calamity—these events do not knock on the door with prior warning. They force families to make agonizing choices between depleting their life savings or compromising on critical needs."
+        ]
+      },
+      {
+        "title": "The Safety Net Isn't a Luxury—It's a Strategy",
+        "type": "highlight",
+        "highlight": "Think of insurance as the ultimate financial risk transfer: you pay a small, predictable premium today so you never have to face an unpredictable, devastating expense tomorrow.",
+        "paragraphs": [
+          "Insurance is not an expense; it is the defensive foundation of your wealth. Just as you invest in mutual funds, stocks, and real estate for growth, you buy insurance to ensure that one bad month doesn't wipe out decades of disciplined investing."
+        ]
+      },
+      {
+        "title": "The Core Pillars of Insurance Coverage",
+        "type": "list",
+        "paragraphs": [
+          "To build an ironclad financial moat around your household, you need to understand the four non-negotiable insurance pillars:"
+        ],
+        "bullets": [
+          "Health Insurance: Covers hospitalization, ICU charges, surgeries, and pre/post medical bills without eating into your investments.",
+          "Term Life Insurance: Provides a substantial sum assured to your dependents in your absence, replacing your lost income and settling existing loans.",
+          "Motor & Two-Wheeler Insurance: Protects against vehicular damage, third-party legal liabilities, and theft.",
+          "Critical Illness Cover: Pays out a lump-sum amount upon diagnosis of major illnesses like cancer, stroke, or heart ailments to manage long recovery periods."
+        ]
+      }
+    ],
+    "keyTakeaways": [
+      "Insurance is risk transfer, not an investment return vehicle.",
+      "Always secure health and term life insurance before putting money into high-risk assets.",
+      "Compare Claim Settlement Ratios (CSR) and network hospitals on CoverMantra before buying."
+    ]
+  },
+  {
+    "_id": "b2",
+    "id": 2,
+    "slug": "stop-wasting-money-choosing-the-right-loan",
+    "legacyId": "Blog2",
+    "title": "Stop Wasting Money: Choosing the Right Loan Guide",
+    "subtitle": "पैसा बर्बाद करना बंद करें: सही लोन चुनने के लिए एक शुरुआती गाइड",
+    "description": "Choosing the right loan can save you lakhs of rupees in interest and hidden fees. Learn the fundamental principles of secured vs unsecured loans and rate comparison.",
+    "category": "Loans",
+    "coverImage": "https://akm-img-a-in.tosshub.com/indiatoday/images/story/202501/business-loan-273540286-1x1.jpg?VersionId=etpS79p3_nAVVNXxHms5h5ioCAD9pJqo",
+    "postedDate": "Sep 7, 2025",
+    "readTime": "7 min read",
+    "author": {
+      "name": "CoverMantra Lending Desk",
+      "role": "Senior Loan Advisory & Research",
+      "avatar": "/image/logo.png"
+    },
+    "tags": ["Personal Loans", "Business Loans", "Interest Rates", "Loan Comparison", "EMI"],
+    "featured": true,
+    "isActive": true,
+    "createdAt": "2025-09-07T10:00:00.000Z",
+    "sections": [
+      {
+        "title": "लोन लेने से पहले सही समझ क्यों ज़रूरी है?",
+        "type": "prose",
+        "paragraphs": [
+          "लोन लेना अक्सर ज़िंदगी के सबसे बड़े वित्तीय फैसलों में से एक होता है—चाहे वह घर खरीदना हो, गाड़ी लेना हो या किसी व्यापार में निवेश करना हो। एक गलत लोन का चुनाव आपको अनावश्यक ब्याज़ (interest) और छिपी हुई फीस के रूप में हज़ारों से लाखों रुपये का नुकसान करा सकता है।",
+          "CoverMantra का उद्देश्य आपको ऐसे बुनियादी सिद्धांत सिखाना है जिससे आप अपनी वित्तीय ज़रूरतों के लिए सबसे सही और किफायती लोन चुन सकें।"
+        ]
+      },
+      {
+        "title": "1. सुरक्षित लोन (Secured) बनाम असुरक्षित लोन (Unsecured)",
+        "type": "list",
+        "paragraphs": [
+          "लोन का चुनाव करते समय सबसे पहले यह समझें कि आपको किस प्रकार के लोन की आवश्यकता है:"
+        ],
+        "bullets": [
+          "सुरक्षित लोन (Secured Loans): इनमें आपको गारंटी (Collateral), जैसे कि प्रॉपर्टी या गोल्ड, गिरवी रखनी पड़ती है। बैंक का जोखिम कम होने के कारण इनकी ब्याज़ दरें आमतौर पर काफी कम होती हैं।",
+          "असुरक्षित लोन (Unsecured Loans): इनमें किसी गारंटी की ज़रूरत नहीं होती, लेकिन आपकी क्रेडिट हिस्ट्री और CIBIL स्कोर देखा जाता है।"
+        ]
+      }
+    ],
+    "keyTakeaways": [
+      "Always check the Annual Percentage Rate (APR), which includes processing fees.",
+      "Maintain a 750+ CIBIL score for quick, low-interest approvals."
+    ]
+  },
+  {
+    "_id": "b3",
+    "id": 3,
+    "slug": "thriving-solo-the-power-of-living-alone",
+    "legacyId": "Blog3",
+    "title": "Thriving Solo: The Power of Living Alone",
+    "subtitle": "The Quiet Revolution: Why Solitude Is Your Greatest Growth Opportunity",
+    "description": "Living alone is your chance to grow stronger, bolder, and more independent. Discover how embracing solitude unlocks unmatched self-reliance and mental clarity.",
+    "category": "Growth",
+    "coverImage": "https://miro.medium.com/v2/resize:fit:1400/0*45811YXR0NM3HUYx",
+    "postedDate": "Sep 10, 2025",
+    "readTime": "5 min read",
+    "author": {
+      "name": "CoverMantra Editorial",
+      "role": "Lifestyle & Growth Desk",
+      "avatar": "/image/logo.png"
+    },
+    "tags": ["Personal Growth", "Independence", "Mindfulness", "Self Reliance"],
+    "featured": false,
+    "isActive": true,
+    "createdAt": "2025-09-10T10:00:00.000Z",
+    "sections": [
+      {
+        "title": "Solitude as a Superpower",
+        "type": "quote",
+        "quote": "Solitude is not loneliness; it is the silence where you finally get to hear your own voice, calibrate your ambitions, and build an unshakable relationship with yourself.",
+        "paragraphs": [
+          "In a culture obsessed with constant digital connection and social validation, choosing to live alone or embracing solitude is often viewed with hesitation. However, those who master living solo discover an unmatched competitive advantage in both personal growth and emotional resilience."
+        ]
+      }
+    ],
+    "keyTakeaways": [
+      "Living alone trains self-reliance, budgeting discipline, and emotional maturity.",
+      "Turn quiet hours into dedicated skill-building and deep focus sessions."
+    ]
+  },
+  {
+    "_id": "b4",
+    "id": 4,
+    "slug": "generative-ai-how-ai-is-reshaping-our-daily-lives",
+    "legacyId": "Blog4",
+    "title": "Generative AI: How AI is Reshaping Our Daily Lives",
+    "subtitle": "From Smart Assistants to Creative Partners — The Practical AI Revolution",
+    "description": "Generative AI tools like ChatGPT, Midjourney, and Copilot have moved from labs to daily essentials. Discover how AI is transforming productivity, learning, and business.",
+    "category": "Technology",
+    "coverImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQovrc4wL1lzSZzK1c0vKxxIfqRwOZ_2zTDcg&s",
+    "postedDate": "Sep 12, 2025",
+    "readTime": "8 min read",
+    "author": {
+      "name": "CoverMantra Tech Desk",
+      "role": "Fintech & AI Research Desk",
+      "avatar": "/image/logo.png"
+    },
+    "tags": ["Artificial Intelligence", "Generative AI", "Future of Work", "Productivity"],
+    "featured": false,
+    "isActive": true,
+    "createdAt": "2025-09-12T10:00:00.000Z",
+    "sections": [
+      {
+        "title": "Introduction: AI Is Already Here",
+        "type": "prose",
+        "paragraphs": [
+          "Remember when artificial intelligence felt like far-off science fiction? Today, generative AI tools are quietly driving our everyday tools—from smart financial advisors to automated code synthesis."
+        ]
+      }
+    ],
+    "keyTakeaways": [
+      "AI is shifting from a novelty to a fundamental workplace utility.",
+      "Fintech platforms use AI to dramatically lower loan processing times."
+    ]
+  },
+  {
+    "_id": "b5",
+    "id": 5,
+    "slug": "smart-money-habits-for-young-professionals",
+    "legacyId": "Blog5",
+    "title": "Smart Money Habits for Young Professionals",
+    "subtitle": "Financial Sovereignty: Simple, Powerful Habits to Build Generational Wealth",
+    "description": "Learn how to manage your money wisely with simple yet powerful financial habits. From saving first to smart investing and avoiding debt traps.",
+    "category": "Finance",
+    "coverImage": "https://thumbs.dreamstime.com/b/hand-holding-coins-to-stack-growth-plant-step-concept-saving-money-finance-accounting-135832008.jpg",
+    "postedDate": "Sep 15, 2025",
+    "readTime": "6 min read",
+    "author": {
+      "name": "CoverMantra Wealth Desk",
+      "role": "Financial Planning & Advisory Desk",
+      "avatar": "/image/logo.png"
+    },
+    "tags": ["Personal Finance", "Money Habits", "Budgeting", "Emergency Fund"],
+    "featured": true,
+    "isActive": true,
+    "createdAt": "2025-09-15T10:00:00.000Z",
+    "sections": [
+      {
+        "title": "1. Save Before You Spend: Flip the Script",
+        "type": "quote",
+        "quote": "Do not save what is left after spending, but spend what is left after saving. — Warren Buffett",
+        "paragraphs": [
+          "Many young professionals make the fatal mistake of spending freely all month and hoping to invest whatever scraps remain in their bank account on the 30th. Instead, set up automated standing instructions to transfer at least 20% to 30% of your salary into SIPs the day salary arrives."
+        ]
+      }
+    ],
+    "keyTakeaways": [
+      "Automate your savings on salary day before paying for lifestyle expenses.",
+      "Keep 6 months of living expenses in an easily accessible liquid fund."
+    ]
+  },
+  {
+    "_id": "b6",
+    "id": 6,
+    "slug": "social-media-impact-on-emotions-and-mental-health",
+    "legacyId": "Blog6",
+    "title": "Social Media Impact on Emotions and Mental Health",
+    "subtitle": "Reclaiming Emotional Wellbeing in a Hyper-Connected Digital Landscape",
+    "description": "Social media connects the world, but unchecked consumption affects emotions, attention spans, and peace of mind. Learn mindful digital consumption strategies.",
+    "category": "Mindset",
+    "coverImage": "https://images.unsplash.com/photo-1683721003111-070bcc053d8b?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE3fHx8ZW58MHx8fHx8",
+    "postedDate": "Sep 17, 2025",
+    "readTime": "5 min read",
+    "author": {
+      "name": "CoverMantra Wellness Desk",
+      "role": "Mindful Living & Behavioral Research",
+      "avatar": "/image/logo.png"
+    },
+    "tags": ["Mental Health", "Mindfulness", "Digital Wellness"],
+    "featured": false,
+    "isActive": true,
+    "createdAt": "2025-09-17T10:00:00.000Z",
+    "sections": [
+      {
+        "title": "The Double-Edged Sword of Constant Connectivity",
+        "type": "prose",
+        "paragraphs": [
+          "Social media has undeniably democratized communication, but algorithmically engineered dopamine loops can induce comparison fatigue and anxiety. Setting intentional boundaries protects your peace of mind."
+        ]
+      }
+    ],
+    "keyTakeaways": [
+      "Set deliberate screen-time boundaries to protect emotional energy."
+    ]
+  },
+  {
+    "_id": "b7",
+    "id": 7,
+    "slug": "the-power-of-cloud-computing-in-todays-world",
+    "legacyId": "Blog7",
+    "title": "The Power of Cloud Computing in Today's World",
+    "subtitle": "Infrastructure Evolution: Transforming Modern Business, Banking, and Scalability",
+    "description": "Cloud computing delivers storage, servers, and databases over the internet. Discover how cloud architecture powers modern financial technology and global platforms.",
+    "category": "Technology",
+    "coverImage": "https://i.postimg.cc/2j14k5Sh/saas-concept-collage.jpg",
+    "postedDate": "Sep 20, 2025",
+    "readTime": "7 min read",
+    "author": {
+      "name": "CoverMantra Tech Desk",
+      "role": "Cloud Architecture & Security Research",
+      "avatar": "/image/logo.png"
+    },
+    "tags": ["Cloud Computing", "Fintech Infrastructure", "Security"],
+    "featured": false,
+    "isActive": true,
+    "createdAt": "2025-09-20T10:00:00.000Z",
+    "sections": [
+      {
+        "title": "From Physical Server Rooms to Elastic Compute",
+        "type": "prose",
+        "paragraphs": [
+          "Cloud platforms allow financial institutions to scale seamlessly while meeting the highest encryption and data security standards."
+        ]
+      }
+    ],
+    "keyTakeaways": [
+      "Cloud architecture empowers aggregators like CoverMantra to deliver 99.99% uptime."
+    ]
+  },
+  {
+    "_id": "b8",
+    "id": 8,
+    "slug": "how-minimalism-in-a-digital-world-can-boost-creativity",
+    "legacyId": "Blog8",
+    "title": "How Minimalism in a Digital World Can Boost Creativity",
+    "subtitle": "Declutter Your Digital Space to Free Your Mental Bandwidth and Unlock Focus",
+    "description": "Discover how simplifying your digital life—reducing apps, desktop clutter, and constant alerts—can free your mind, enhance deep focus, and spark creativity.",
+    "category": "Lifestyle",
+    "coverImage": "https://i.postimg.cc/GpcsDLJL/abstract-still-life-universe-composition.jpg",
+    "postedDate": "Sep 25, 2025",
+    "readTime": "5 min read",
+    "author": {
+      "name": "CoverMantra Editorial",
+      "role": "Digital Productivity & Lifestyle Desk",
+      "avatar": "/image/logo.png"
+    },
+    "tags": ["Digital Minimalism", "Creativity", "Productivity"],
+    "featured": false,
+    "isActive": true,
+    "createdAt": "2025-09-25T10:00:00.000Z",
+    "sections": [
+      {
+        "title": "The Hidden Cost of Digital Noise",
+        "type": "quote",
+        "quote": "Clutter is not just physical stuff. Digital clutter occupies the same precious mental real estate.",
+        "paragraphs": [
+          "Clear workspaces invite clear thinking. Reducing notifications helps you achieve deep focus on high-leverage tasks."
+        ]
+      }
+    ],
+    "keyTakeaways": [
+      "Creativity flourishes when cognitive load is reduced."
+    ]
+  },
+  {
+    "_id": "b9",
+    "id": 9,
+    "slug": "the-power-of-small-wins-tiny-achievements-big-success",
+    "legacyId": "Blog9",
+    "title": "The Power of Small Wins: Tiny Achievements, Big Success",
+    "subtitle": "The Compound Effect of Progress: Why 1% Better Every Day Beats Occasional Sprints",
+    "description": "Discover how celebrating small victories every day builds confidence, momentum, and compound growth toward achieving your biggest financial and personal goals.",
+    "category": "Mindset",
+    "coverImage": "https://www.thedawoodibohras.com/wp-content/uploads/2019/07/Failure_Success-blog-featured-image-862x559.jpg",
+    "postedDate": "Sep 26, 2025",
+    "readTime": "6 min read",
+    "author": {
+      "name": "CoverMantra Editorial",
+      "role": "Strategy & Performance Research Desk",
+      "avatar": "/image/logo.png"
+    },
+    "tags": ["Habits", "Compound Effect", "Goal Setting"],
+    "featured": false,
+    "isActive": true,
+    "createdAt": "2025-09-26T10:00:00.000Z",
+    "sections": [
+      {
+        "title": "The Mathematics of Small Improvements",
+        "type": "highlight",
+        "highlight": "If you get just 1% better each day for one year, you'll end up thirty-seven times better by the time you're done. Small wins compound into extraordinary breakthroughs.",
+        "paragraphs": [
+          "Paying off a small balance today builds the emotional confidence required to eliminate large debts and reach complete financial independence."
+        ]
+      }
+    ],
+    "keyTakeaways": [
+      "Consistency always outperforms sporadic bursts of intense effort."
+    ]
+  },
+  {
+    "_id": "b10",
+    "id": 10,
+    "slug": "digital-dreams-creativity-in-a-connected-world",
+    "legacyId": "Blog10",
+    "title": "Digital Dreams: Creativity in a Connected World",
+    "subtitle": "The Art of Staying Creative and Distinct in an Algorithmic Era",
+    "description": "Creativity is no longer confined to sketchbooks or studios—it lives in every pixel, code line, and digital connection. Learn how human creativity merges with modern tech.",
+    "category": "Technology",
+    "coverImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVqksbeUen4BxKm-YsRtgMugRqvD-UJSmfpg&s",
+    "postedDate": "Sep 30, 2025",
+    "readTime": "6 min read",
+    "author": {
+      "name": "CoverMantra Creative Desk",
+      "role": "Digital Strategy & Media",
+      "avatar": "/image/logo.png"
+    },
+    "tags": ["Creativity", "Innovation", "Storytelling"],
+    "featured": false,
+    "isActive": true,
+    "createdAt": "2025-09-30T10:00:00.000Z",
+    "sections": [
+      {
+        "title": "Where Art Meets Algorithms",
+        "type": "prose",
+        "paragraphs": [
+          "As AI tools generate content in seconds, true creative value belongs to authentic human perspective, taste, and emotional depth."
+        ]
+      }
+    ],
+    "keyTakeaways": [
+      "Human authenticity cuts through infinite algorithmic content."
+    ]
+  }
+]

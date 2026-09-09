@@ -78,6 +78,7 @@ const userRoutes = require("./routes/userRoutes");
 const lenderRoutes = require("./routes/lenderRoutes");
 const partnerRoutes = require("./routes/partnerRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const blogRoutes = require("./routes/blogRoutes");
 const insurence = require("./insurence/insurences");
 
 // Legacy Partner Direct Routes
@@ -89,6 +90,8 @@ const vivifiRoutes = require("./PartnerRoutes/vivifi/vivifi");
 app.use("/api/user", userRoutes);
 app.use("/api/lenders", lenderRoutes);
 app.use("/api/partners", partnerRoutes);
+app.use("/api/blogs", blogRoutes);
+app.use("/api/auth-gate-70898/blogs", blogRoutes);
 app.use("/api/auth-gate-70898", adminRoutes);
 app.use("/api/insurence", insurence);
 
