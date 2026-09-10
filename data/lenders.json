@@ -48,17 +48,17 @@
     "priority": 2,
     "approval": "Good",
     "loanAmount": "₹8,000 to ₹35,000",
-    "interestRate": "Starting from 0.1% - 0.2% per day",
-    "processingFee": "Approximately 6% - 7% of the sanctioned loan amount",
+    "interestRate": "Starting from 0.2% - 0.3% per day (APR: 24% - 36% p.a.)",
+    "processingFee": "Approx. 4% - 6% + GST (Deducted at disbursement)",
     "support": "24/7 customer support",
     "ratings": 4.3,
     "features": [
-      "Instant Approval & Disbursal within 15 min",
-      "100% Digital Journey (Zero Paperwork)",
-      "Min CIBIL: 680 (salary >= 30k) or 720 (salary 20k-30k)",
-      "No Credit History / Prepayment Charges",
-      "Salaried Only (Income >= 20k)",
-      "Tenure: Up to 45 days (No EMI)"
+      "Digital In-Principle Evaluation & Quick Disbursal",
+      "Daily Rate: 0.2% - 0.3%/day (APR: 24% - 36% p.a.)",
+      "Zero Prepayment Penalty: Pay only for days utilized",
+      "Fee deducted directly from bank disbursement",
+      "Salaried Only (Income >= ₹20k | Min CIBIL: 680/720)",
+      "Flexible Tenure: 91 to 365 Days (Compliant with Meta)"
     ],
     "applyLink": "/LenderAPI/credify",
     "loanTypes": [

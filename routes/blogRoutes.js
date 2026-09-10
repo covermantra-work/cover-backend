@@ -77,6 +77,29 @@ router.get("/", (req, res) => {
   }
 });
 
+// ==========================================
+// ADMIN ROUTES (Protected with combinedAdminAuth)
+// Must be defined BEFORE dynamic /:slug parameter route!
+// ==========================================
+
+// @route   GET /api/blogs/admin/all or /api/blogs/all
+// @desc    Get all blogs (including drafts/inactive) for Admin Panel
+// @access  Admin
+router.get(["/admin/all", "/all"], combinedAdminAuth, (req, res) => {
+  try {
+    const blogs = readBlogs();
+    blogs.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+    res.json({
+      success: true,
+      total: blogs.length,
+      blogs,
+    });
+  } catch (error) {
+    console.error("Error fetching admin blogs:", error);
+    res.status(500).json({ message: "Server Error fetching admin blogs" });
+  }
+});
+
 // @route   GET /api/blogs/:slug
 // @desc    Get single blog by slug, legacyId, or id
 // @access  Public
@@ -101,28 +124,6 @@ router.get("/:slug", (req, res) => {
   } catch (error) {
     console.error("Error fetching single blog:", error);
     res.status(500).json({ message: "Server Error fetching blog" });
-  }
-});
-
-// ==========================================
-// ADMIN ROUTES (Protected with combinedAdminAuth)
-// ==========================================
-
-// @route   GET /api/blogs/admin/all
-// @desc    Get all blogs (including drafts/inactive) for Admin Panel
-// @access  Admin
-router.get("/admin/all", combinedAdminAuth, (req, res) => {
-  try {
-    const blogs = readBlogs();
-    blogs.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-    res.json({
-      success: true,
-      total: blogs.length,
-      blogs,
-    });
-  } catch (error) {
-    console.error("Error fetching admin blogs:", error);
-    res.status(500).json({ message: "Server Error fetching admin blogs" });
   }
 });
 

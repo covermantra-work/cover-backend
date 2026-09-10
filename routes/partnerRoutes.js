@@ -8,13 +8,28 @@ const authMiddleware = require("../middlewares/authMiddleware");
 const submissionLocks = new Map();
 const LOCK_TIMEOUT_MS = 15000; // 15 seconds lock
 
+const ID_TO_ADAPTER = {
+  c1: "credify",
+  v1: "vivifi",
+  f1: "fatakPay",
+  z1: "zype",
+  m1: "moneyview"
+};
+
+function getAdapter(lenderId) {
+  if (!lenderId) return null;
+  const rawId = String(lenderId).toLowerCase();
+  const mappedKey = ID_TO_ADAPTER[rawId] || rawId;
+  const adapterKey = Object.keys(adapters).find(k => k.toLowerCase() === mappedKey.toLowerCase());
+  return adapterKey ? adapters[adapterKey] : null;
+}
+
 // @route   GET /api/partners/:lenderId/form-config
 // @desc    Get form configuration for a specific lender
 // @access  Public
 router.get("/:lenderId/form-config", (req, res) => {
   const { lenderId } = req.params;
-  const adapterKey = Object.keys(adapters).find(k => k.toLowerCase() === lenderId.toLowerCase());
-  const adapter = adapters[adapterKey];
+  const adapter = getAdapter(lenderId);
 
   if (!adapter) {
     return res.status(404).json({ message: `Lender adapter not found for ID: ${lenderId}` });
@@ -34,8 +49,7 @@ router.get("/:lenderId/form-config", (req, res) => {
 // @access  Private
 router.post("/:lenderId/register", authMiddleware, async (req, res) => {
   const { lenderId } = req.params;
-  const adapterKey = Object.keys(adapters).find(k => k.toLowerCase() === lenderId.toLowerCase());
-  const adapter = adapters[adapterKey];
+  const adapter = getAdapter(lenderId);
 
   if (!adapter) {
     return res.status(404).json({ message: `Lender adapter not found for ID: ${lenderId}` });
@@ -236,7 +250,8 @@ router.get("/click-redirect", async (req, res) => {
       // Decorate targetUrl with phone/mobile and other parameters
       let finalTargetUrl = targetUrl;
       try {
-        const urlObj = new URL(finalTargetUrl.startsWith("http") ? finalTargetUrl : `https://${finalTargetUrl}`);
+        const [cleanBase, hashFragment] = targetUrl.split("#");
+        const urlObj = new URL(cleanBase.startsWith("http") ? cleanBase : `https://${cleanBase}`);
         if (phone) {
           urlObj.searchParams.set("phone", String(phone));
           urlObj.searchParams.set("mobile", String(phone));
@@ -244,25 +259,28 @@ router.get("/click-redirect", async (req, res) => {
         if (userPincode) urlObj.searchParams.set("pincode", String(userPincode));
         if (user && user.income) urlObj.searchParams.set("salary", String(user.income));
         
-        // Append all incoming tracking parameters (such as utm_source, utm_id, etc.)
+        // Append all incoming tracking parameters without overwriting partner-specific query params
         Object.keys(req.query).forEach(key => {
           if (key !== 'lenderId' && key !== 'phone') {
-            urlObj.searchParams.set(key, String(req.query[key]));
+            if (!urlObj.searchParams.has(key)) {
+              urlObj.searchParams.set(key, String(req.query[key]));
+            }
           }
         });
         
-        finalTargetUrl = urlObj.toString();
+        const rebuilt = urlObj.toString();
+        finalTargetUrl = hashFragment ? `${rebuilt}#${hashFragment}` : rebuilt;
       } catch (urlErr) {
-        const separator = finalTargetUrl.includes("?") ? "&" : "?";
+        const [cleanBase, hashFragment] = targetUrl.split("#");
+        const separator = cleanBase.includes("?") ? "&" : "?";
         let params = [];
         if (phone) {
           params.push(`phone=${phone}`);
           params.push(`mobile=${phone}`);
         }
         if (userPincode) params.push(`pincode=${userPincode}`);
-        if (params.length > 0) {
-          finalTargetUrl = `${finalTargetUrl}${separator}${params.join("&")}`;
-        }
+        const paramStr = params.length > 0 ? `${separator}${params.join("&")}` : "";
+        finalTargetUrl = hashFragment ? `${cleanBase}${paramStr}#${hashFragment}` : `${cleanBase}${paramStr}`;
       }
 
       // Save to LenderResponse collection
@@ -296,7 +314,21 @@ router.get("/click-redirect", async (req, res) => {
       
       res.redirect(finalTargetUrl);
     } else {
-      res.redirect(targetUrl);
+      let finalTargetUrl = targetUrl;
+      try {
+        const [cleanBase, hashFragment] = targetUrl.split("#");
+        const urlObj = new URL(cleanBase.startsWith("http") ? cleanBase : `https://${cleanBase}`);
+        Object.keys(req.query).forEach(key => {
+          if (key !== 'lenderId' && key !== 'phone') {
+            if (!urlObj.searchParams.has(key)) {
+              urlObj.searchParams.set(key, String(req.query[key]));
+            }
+          }
+        });
+        const rebuilt = urlObj.toString();
+        finalTargetUrl = hashFragment ? `${rebuilt}#${hashFragment}` : rebuilt;
+      } catch(e) {}
+      res.redirect(finalTargetUrl);
     }
 
   } catch (error) {
