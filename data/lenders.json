@@ -63,7 +63,8 @@
     "applyLink": "/LenderAPI/credify",
     "loanTypes": [
       "instant",
-      "personal"
+      "personal",
+      "short_term"
     ],
     "isActive": true
   },
