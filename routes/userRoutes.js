@@ -329,11 +329,11 @@ router.post("/verify-otp", authLimiter, async (req, res) => {
       try {
         await webusername.findOneAndUpdate(
           { phone },
-          { 
-            $set: { 
+          {
+            $set: {
               isAppUser: true,
               ...(req.body.fcmToken && { fcmToken: req.body.fcmToken })
-            } 
+            }
           }
         );
       } catch (dbErr) {
@@ -481,42 +481,55 @@ router.post("/delete-profile", authMiddleware, async (req, res) => {
 
 router.put("/update-profile", authMiddleware, async (req, res) => {
   try {
-    const phone = req.user.phone;
+    const rawPhone = (req.user && typeof req.user === "object" ? req.user.phone : req.user) || req.body.phone;
 
-    if (!phone) {
-      return res.status(400).json({ message: "Phone number is required" });
+    if (!rawPhone) {
+      return res.status(400).json({ status: 400, message: "Phone number is required" });
     }
 
-    const allowedUpdates = ["name", "email", "city", "state", "gender", "employment", "income", "pincode", "dob", "pan"];
+    const cleanPhone = String(rawPhone).replace(/^\+91/, "").trim();
+
+    const allowedUpdates = ["name", "email", "city", "state", "gender", "employment", "income", "pincode", "dob", "pan", "fcmToken"];
     const updateData = {};
     Object.keys(req.body).forEach(key => {
-      if (allowedUpdates.includes(key)) {
-        updateData[key] = req.body[key];
+      if (allowedUpdates.includes(key) && req.body[key] !== undefined && req.body[key] !== null && req.body[key] !== "") {
+        updateData[key] = typeof req.body[key] === "string" ? req.body[key].trim() : req.body[key];
       }
     });
 
+    if (updateData.pan) {
+      updateData.pan = String(updateData.pan).toUpperCase();
+    }
+
     if (Object.keys(updateData).length === 0) {
-      return res.status(400).json({ message: "No valid fields provided for update" });
+      return res.status(400).json({ status: 400, message: "No valid fields provided for update" });
     }
 
     const updatedUser = await webusername.findOneAndUpdate(
-      { phone: phone },
+      { $or: [{ phone: cleanPhone }, { phone: String(rawPhone) }] },
       { $set: updateData },
-      { new: true, runValidators: true },
+      { new: true, runValidators: false },
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ message: "webusername not found " });
+      return res.status(404).json({ status: 404, message: "User profile not found" });
     }
 
-    return res
-      .status(200)
-      .json({ message: "webusername update sucessfully", updatedUser });
+    return res.status(200).json({
+      status: 200,
+      message: "Profile updated successfully",
+      updatedUser,
+      user: updatedUser,
+    });
   } catch (error) {
     console.error("Update profile error:", error);
-    return res
-      .status(500)
-      .json({ message: "Server error" });
+    if (error.code === 11000) {
+      return res.status(400).json({ status: 400, message: "Email is already in use by another account" });
+    }
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ status: 400, message: error.message });
+    }
+    return res.status(500).json({ status: 500, message: error.message || "Server error" });
   }
 });
 
